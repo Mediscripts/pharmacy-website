@@ -1,0 +1,35 @@
+.section-heading {
+  display: grid;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.section-heading.is-centered {
+  justify-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.section-heading__eyebrow {
+  margin: 0;
+  color: #0f766e;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.section-heading__title {
+  margin: 0;
+  color: #0f172a;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+}
+
+.section-heading__description {
+  margin: 0;
+  color: #475569;
+  line-height: 1.75;
+}

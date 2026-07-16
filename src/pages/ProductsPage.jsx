@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import SectionHeading from '../components/ui/SectionHeading'
 import ProductCard from '../components/home/ProductCard'
-import { categories as fallbackCategories, featuredProducts } from '../data/siteContent'
+import { categories as fallbackCategories } from '../data/siteContent'
 import './ProductsPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -20,14 +20,29 @@ function SearchIcon() {
   )
 }
 
+function ProductSkeletonCard() {
+  return (
+    <article className="product-skeleton">
+      <div className="product-skeleton__image" />
+      <div className="product-skeleton__content">
+        <div className="product-skeleton__line product-skeleton__line--title" />
+        <div className="product-skeleton__line product-skeleton__line--chip" />
+        <div className="product-skeleton__line product-skeleton__line--body" />
+        <div className="product-skeleton__line product-skeleton__line--body product-skeleton__line--short" />
+        <div className="product-skeleton__footer">
+          <div className="product-skeleton__line product-skeleton__line--price" />
+          <div className="product-skeleton__button" />
+        </div>
+      </div>
+    </article>
+  )
+}
+
 function ProductsPage() {
   const [query, setQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [products, setProducts] = useState(featuredProducts)
-  const [availableCategories, setAvailableCategories] = useState([
-    'All',
-    ...fallbackCategories,
-  ])
+  const [products, setProducts] = useState([])
+  const [availableCategories, setAvailableCategories] = useState(['All', ...fallbackCategories])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -51,14 +66,11 @@ function ProductsPage() {
           throw new Error(productsPayload.message || 'Unable to load products.')
         }
 
-        if (
-          isMounted &&
-          Array.isArray(productsPayload.products) &&
-          productsPayload.products.length > 0
-        ) {
+        if (isMounted && Array.isArray(productsPayload.products)) {
           setProducts(
             productsPayload.products.map((product) => ({
               id: product.id,
+              slug: product.slug,
               category: product.category,
               name: product.name,
               description: product.description,
@@ -69,6 +81,7 @@ function ProductsPage() {
                   ? product.images[0]
                   : '/product-placeholder.svg',
               inStock: Number(product.stockQuantity || 0) > 0,
+              prescriptionRequired: Boolean(product.prescriptionRequired),
             })),
           )
         }
@@ -86,7 +99,7 @@ function ProductsPage() {
         }
       } catch {
         if (isMounted) {
-          setError('Showing sample products while live catalog data is unavailable.')
+          setError('Unable to load live catalog data right now.')
         }
       } finally {
         if (isMounted) {
@@ -166,12 +179,20 @@ function ProductsPage() {
       <section className="catalog-results" aria-live="polite">
         {loading ? <p className="catalog-results__count">Loading catalog...</p> : null}
         {!loading && error ? <p className="catalog-results__count">{error}</p> : null}
-        <p className="catalog-results__count">
-          Showing {filteredProducts.length}{' '}
-          {filteredProducts.length === 1 ? 'medicine' : 'medicines'}
-        </p>
+        {!loading ? (
+          <p className="catalog-results__count">
+            Showing {filteredProducts.length}{' '}
+            {filteredProducts.length === 1 ? 'medicine' : 'medicines'}
+          </p>
+        ) : null}
 
-        {filteredProducts.length > 0 ? (
+        {loading ? (
+          <div className="catalog-grid" aria-label="Loading medicines">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <ProductSkeletonCard key={`skeleton-${index}`} />
+            ))}
+          </div>
+        ) : filteredProducts.length > 0 ? (
           <div className="catalog-grid">
             {filteredProducts.map((product) => (
               <ProductCard key={product.id} {...product} />

@@ -35,6 +35,7 @@ export const categories = [
 export const featuredProducts = [
   {
     id: 'paracetamol-500mg',
+    slug: 'paracetamol-500mg',
     category: 'Pain Relief',
     name: 'Paracetamol 500mg',
     description: 'Everyday relief for fever and mild pain, delivered with a simple and reliable ordering experience.',
@@ -42,9 +43,11 @@ export const featuredProducts = [
     note: 'In stock',
     image: '/product-placeholder.svg',
     inStock: true,
+    prescriptionRequired: false,
   },
   {
     id: 'vitamin-c-tablets',
+    slug: 'vitamin-c-tablets',
     category: 'Supplements',
     name: 'Vitamin C Tablets',
     description: 'Daily immune support with a smooth, easy way to shop for your essentials.',
@@ -52,9 +55,11 @@ export const featuredProducts = [
     note: 'Popular',
     image: '/product-placeholder.svg',
     inStock: true,
+    prescriptionRequired: false,
   },
   {
     id: 'baby-lotion',
+    slug: 'baby-lotion',
     category: 'Baby Care',
     name: 'Baby Lotion',
     description: 'Gentle care essentials for infants and toddlers, ready when you need them.',
@@ -62,9 +67,11 @@ export const featuredProducts = [
     note: 'Fast moving',
     image: '/product-placeholder.svg',
     inStock: true,
+    prescriptionRequired: false,
   },
   {
     id: 'antiseptic-cream',
+    slug: 'antiseptic-cream',
     category: 'Skin Care',
     name: 'Antiseptic Cream',
     description: 'Reliable skin care for everyday comfort, available with a simple order process.',
@@ -72,9 +79,11 @@ export const featuredProducts = [
     note: 'Available',
     image: '/product-placeholder.svg',
     inStock: true,
+    prescriptionRequired: false,
   },
   {
     id: 'glucometer-strips',
+    slug: 'glucometer-strips',
     category: 'Diabetes',
     name: 'Glucometer Strips',
     description: 'Essential diabetes supplies you can reorder with confidence and convenience.',
@@ -82,9 +91,11 @@ export const featuredProducts = [
     note: 'Limited stock',
     image: '/product-placeholder.svg',
     inStock: false,
+    prescriptionRequired: false,
   },
   {
     id: 'amoxicillin-capsules',
+    slug: 'amoxicillin-capsules',
     category: 'Prescription',
     name: 'Amoxicillin Capsules',
     description: 'A secure prescription-based purchase flow designed to keep your care moving smoothly.',
@@ -92,6 +103,7 @@ export const featuredProducts = [
     note: 'Prescription required',
     image: '/product-placeholder.svg',
     inStock: true,
+    prescriptionRequired: true,
   },
 ]
 

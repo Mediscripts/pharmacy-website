@@ -5,9 +5,12 @@ import AdminCatalogPage from './pages/AdminCatalogPage'
 import AdminProductPage from './pages/AdminProductPage'
 import AdminInventoryPage from './pages/AdminInventoryPage'
 import AdminLoginPage from './pages/AdminLoginPage'
+import CheckoutPage from './pages/CheckoutPage'
 import HomePage from './pages/HomePage'
+import ProductDetailPage from './pages/ProductDetailPage'
 import ProductsPage from './pages/ProductsPage'
 import CartPage from './pages/CartPage'
+import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import TrackOrderPage from './pages/TrackOrderPage'
 import ContactPage from './pages/ContactPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -25,7 +28,10 @@ function App() {
         <Route element={<SiteLayout />}>
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
+          <Route path="products/:productSlug" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
+          <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="checkout/success/:orderNumber" element={<OrderConfirmationPage />} />
           <Route path="track-order" element={<TrackOrderPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />

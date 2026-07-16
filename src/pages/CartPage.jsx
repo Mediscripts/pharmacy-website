@@ -74,9 +74,9 @@ function CartPage() {
             <strong>₦{subtotal.toLocaleString()}</strong>
           </div>
           <p>Delivery and prescription review will be handled during checkout.</p>
-          <button type="button" className="cart-page__checkout">
+          <Link className="cart-page__checkout" to="/checkout">
             Proceed to checkout
-          </button>
+          </Link>
           <Link className="cart-page__link" to="/products">
             Continue shopping
           </Link>

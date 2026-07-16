@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Link, Navigate } from 'react-router-dom'
 import useAuth from '../context/useAuth'
 
@@ -6,56 +6,29 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
 
 function AdminDashboardPage() {
   const { isAdmin, logout, loading, user, accessToken } = useAuth()
-  const [summary, setSummary] = useState(null)
-  const [summaryLoading, setSummaryLoading] = useState(true)
-  const [summaryError, setSummaryError] = useState('')
 
-  useEffect(() => {
-    let isMounted = true
+  const summaryQuery = useQuery({
+    queryKey: ['admin-summary', accessToken],
+    enabled: !loading && isAdmin && Boolean(accessToken),
+    queryFn: async () => {
+      const response = await fetch(`${apiBaseUrl}/api/admin/summary`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
 
-    if (loading || !isAdmin || !accessToken) {
-      return () => {
-        isMounted = false
+      const payload = await response.json()
+
+      if (!response.ok) {
+        throw new Error(payload.message || 'Unable to load dashboard summary.')
       }
-    }
 
-    const loadSummary = async () => {
-      setSummaryLoading(true)
-      setSummaryError('')
-
-      try {
-        const response = await fetch(`${apiBaseUrl}/api/admin/summary`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-
-        const payload = await response.json()
-
-        if (!response.ok) {
-          throw new Error(payload.message || 'Unable to load dashboard summary.')
-        }
-
-        if (isMounted) {
-          setSummary(payload.metrics)
-        }
-      } catch (error) {
-        if (isMounted) {
-          setSummaryError(error.message)
-        }
-      } finally {
-        if (isMounted) {
-          setSummaryLoading(false)
-        }
-      }
-    }
-
-    loadSummary()
-
-    return () => {
-      isMounted = false
-    }
-  }, [accessToken, isAdmin, loading])
+      return payload.metrics
+    },
+    staleTime: 15 * 1000,
+    refetchInterval: 30 * 1000,
+    refetchIntervalInBackground: false,
+  })
 
   if (loading) {
     return (
@@ -80,25 +53,47 @@ function AdminDashboardPage() {
         background: '#fff',
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '1rem',
+        }}
+      >
         <div>
           <p style={{ margin: 0, color: '#0f766e', fontWeight: 600 }}>Admin access</p>
           <h1 style={{ margin: '0.2rem 0 0' }}>Dashboard</h1>
         </div>
-        <button type="button" onClick={logout} style={{ padding: '0.7rem 1rem', borderRadius: '999px', border: '1px solid #cbd5e1', background: '#fff', cursor: 'pointer' }}>Log out</button>
+        <button
+          type="button"
+          onClick={logout}
+          style={{
+            padding: '0.7rem 1rem',
+            borderRadius: '999px',
+            border: '1px solid #cbd5e1',
+            background: '#fff',
+            cursor: 'pointer',
+          }}
+        >
+          Log out
+        </button>
       </div>
 
       <p style={{ color: '#475569', marginTop: '1rem' }}>
-        Welcome{user?.fullName ? `, ${user.fullName}` : ''}. This is the first admin-only screen. Product, inventory, and prescription management can be added here next.
+        Welcome{user?.fullName ? `, ${user.fullName}` : ''}. This is the first admin-only screen.
+        Product, inventory, and prescription management can be added here next.
       </p>
 
       <section style={{ marginTop: '2rem' }}>
         <h2 style={{ marginTop: 0 }}>Live summary</h2>
 
-        {summaryLoading ? <p>Loading summary...</p> : null}
-        {summaryError ? <p style={{ color: '#b91c1c' }}>{summaryError}</p> : null}
+        {summaryQuery.isLoading ? <p>Loading summary...</p> : null}
+        {summaryQuery.isError ? (
+          <p style={{ color: '#b91c1c' }}>{summaryQuery.error?.message}</p>
+        ) : null}
 
-        {summary ? (
+        {summaryQuery.data ? (
           <div
             style={{
               display: 'grid',
@@ -107,13 +102,13 @@ function AdminDashboardPage() {
             }}
           >
             {[
-              ['Total orders', summary.totalOrders],
-              ['Pending orders', summary.pendingOrders],
-              ['Pending reviews', summary.pendingPrescriptionReviews],
-              ['Products', summary.totalProducts],
-              ['Low stock', summary.lowStockProducts],
-              ['Out of stock', summary.outOfStockProducts],
-              ['Revenue', `NGN ${Number(summary.revenue || 0).toLocaleString()}`],
+              ['Total orders', summaryQuery.data.totalOrders],
+              ['Pending orders', summaryQuery.data.pendingOrders],
+              ['Pending reviews', summaryQuery.data.pendingPrescriptionReviews],
+              ['Products', summaryQuery.data.totalProducts],
+              ['Low stock', summaryQuery.data.lowStockProducts],
+              ['Out of stock', summaryQuery.data.outOfStockProducts],
+              ['Revenue', `NGN ${Number(summaryQuery.data.revenue || 0).toLocaleString()}`],
             ].map(([label, value]) => (
               <article
                 key={label}

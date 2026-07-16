@@ -14,10 +14,13 @@ function ProductCard({
   inStock,
   prescriptionRequired,
   slug,
+  images,
 }) {
   const { addToCart } = useCart()
   const [feedback, setFeedback] = useState('')
   const productPath = `/products/${slug || id}`
+  const imageSource =
+    image || (Array.isArray(images) && images.length > 0 ? images[0] : '/product-placeholder.svg')
 
   const handleAdd = () => {
     if (inStock === false) {
@@ -56,7 +59,7 @@ function ProductCard({
         to={productPath}
         aria-label={`View details for ${name}`}
       >
-        <img className="product-card__image" src={image || '/product-placeholder.svg'} alt={name} />
+        <img className="product-card__image" src={imageSource} alt={name} />
       </Link>
 
       <div className="product-card__content">

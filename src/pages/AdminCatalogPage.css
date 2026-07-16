@@ -415,13 +415,65 @@
 
 .category-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  max-width: 100%;
 }
 
 .category-card {
-  display: grid;
-  gap: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid #dbe4ea;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #0f766e, #134e4a);
+}
+
+.category-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.category-card__meta {
+  flex: 1;
+}
+
+.category-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.category-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.category-card .drawer-actions {
+  margin-top: auto;
+  justify-content: flex-start;
+  padding-top: 0.5rem;
 }
 
 .catalog-view {
@@ -446,9 +498,20 @@
 .admin-category-layout {
   margin-top: 1.25rem;
   display: grid;
-  grid-template-columns: minmax(320px, 380px) 1fr;
-  gap: 1.25rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
   align-items: start;
+}
+
+.admin-category-layout .drawer-card {
+  max-width: 500px;
+}
+
+.admin-category-layout h2 {
+  margin: 0 0 1.2rem;
+  font-size: 1.25rem;
+  color: #0f172a;
+  font-weight: 700;
 }
 
 .admin-state-card {
@@ -478,7 +541,23 @@
   .admin-drawer {
     position: static;
   }
+
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
+
+@media (max-width: 820px) {
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-card {
+    padding: 1.25rem;
+  }
+}
+
+
 
 @media (max-width: 720px) {
   .admin-shell {
@@ -497,5 +576,9 @@
   .category-grid,
   .drawer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .category-card {
+    padding: 1rem;
   }
 }

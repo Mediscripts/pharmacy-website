@@ -289,7 +289,7 @@ function AdminCatalogPage() {
           <form className="drawer-card" onSubmit={handleCategorySubmit}>
             <div className="drawer-card__header">
               <div>
-                <p className="admin-kicker">Category form</p>
+                <p className="admin-kicker">New category</p>
                 <h2>Create category</h2>
               </div>
             </div>
@@ -324,39 +324,43 @@ function AdminCatalogPage() {
             </div>
           </form>
 
-          <div className="category-grid">
-            {categories.map((category) => (
-              <article className="category-card" key={category.id}>
-                <div className="category-card__top">
-                  <div>
-                    <p className="admin-kicker">Category</p>
-                    <h3>{category.name}</h3>
-                  </div>
-                  <span className={category.is_active ? 'status-badge' : 'status-badge status-badge--muted'}>
-                    {category.is_active ? 'Active' : 'Archived'}
-                  </span>
-                </div>
-                <p>{category.description || 'No description yet.'}</p>
-                <div className="drawer-actions">
-                  <button
-                    type="button"
-                    className="admin-button admin-button--ghost"
-                    onClick={async () => {
-                      try {
-                        await archiveCategory(category.id)
-                        setActionMessage('Category archived.')
-                      } catch (error) {
-                        setActionMessage(error.message)
-                      }
-                    }}
-                    disabled={!category.is_active}
-                  >
-                    Archive
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
+          {categories.length > 0 ? (
+            <div>
+              <h2 style={{ margin: '0 0 1rem', fontSize: '1.2rem' }}>Categories ({categories.length})</h2>
+              <div className="category-grid">
+                {categories.map((category) => (
+                  <article className="category-card" key={category.id}>
+                    <div className="category-card__top">
+                      <div className="category-card__meta">
+                        <h3>{category.name}</h3>
+                        <p>{category.description || 'No description yet.'}</p>
+                      </div>
+                      <span className={category.is_active ? 'status-badge' : 'status-badge status-badge--muted'}>
+                        {category.is_active ? 'Active' : 'Archived'}
+                      </span>
+                    </div>
+                    <div className="drawer-actions">
+                      <button
+                        type="button"
+                        className="admin-button admin-button--ghost"
+                        onClick={async () => {
+                          try {
+                            await archiveCategory(category.id)
+                            setActionMessage('Category archived.')
+                          } catch (error) {
+                            setActionMessage(error.message)
+                          }
+                        }}
+                        disabled={!category.is_active}
+                      >
+                        Archive
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </section>
       )}
     </main>

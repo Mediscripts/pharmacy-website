@@ -1,10 +1,22 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import useCart from '../context/useCart'
-import { featuredProducts } from '../data/siteContent'
 import './ProductDetailPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
+
+function fetchJson(url) {
+  return fetch(url).then(async (response) => {
+    const payload = await response.json()
+
+    if (!response.ok) {
+      throw new Error(payload.message || 'Unable to load this medicine.')
+    }
+
+    return payload
+  })
+}
 
 function normalizeProduct(product) {
   return {
@@ -74,63 +86,16 @@ function DetailIcon({ name }) {
 function ProductDetailPage() {
   const { productSlug } = useParams()
   const { addToCart } = useCart()
-  const [product, setProduct] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
   const [feedback, setFeedback] = useState('')
 
-  const fallbackProduct = useMemo(
-    () => featuredProducts.find((item) => (item.slug || item.id) === productSlug),
-    [productSlug],
-  )
+  const productQuery = useQuery({
+    queryKey: ['catalog-product', productSlug],
+    queryFn: () => fetchJson(`${apiBaseUrl}/api/catalog/products/${productSlug}`),
+    enabled: Boolean(productSlug),
+    staleTime: 5 * 60 * 1000,
+  })
 
-  useEffect(() => {
-    let isMounted = true
-
-    const loadProduct = async () => {
-      setLoading(true)
-      setError('')
-
-      try {
-        const response = await fetch(`${apiBaseUrl}/api/catalog/products/${productSlug}`)
-        const payload = await response.json()
-
-        if (response.ok && payload.product) {
-          if (isMounted) {
-            setProduct(normalizeProduct(payload.product))
-          }
-          return
-        }
-
-        if (fallbackProduct) {
-          if (isMounted) {
-            setProduct(normalizeProduct(fallbackProduct))
-          }
-          return
-        }
-
-        throw new Error(payload.message || 'Unable to load this product.')
-      } catch (fetchError) {
-        if (fallbackProduct) {
-          if (isMounted) {
-            setProduct(normalizeProduct(fallbackProduct))
-          }
-        } else if (isMounted) {
-          setError(fetchError.message)
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    loadProduct()
-
-    return () => {
-      isMounted = false
-    }
-  }, [fallbackProduct, productSlug])
+  const product = productQuery.data?.product ? normalizeProduct(productQuery.data.product) : null
 
   useEffect(() => {
     if (!feedback) {
@@ -141,7 +106,7 @@ function ProductDetailPage() {
     return () => window.clearTimeout(timeoutId)
   }, [feedback])
 
-  if (loading) {
+  if (productQuery.isLoading) {
     return (
       <div className="page product-detail-page">
         <div className="product-detail__loading">Loading medicine details...</div>
@@ -149,11 +114,7 @@ function ProductDetailPage() {
     )
   }
 
-  if (error && !product) {
-    return <Navigate to="/products" replace />
-  }
-
-  if (!product) {
+  if (productQuery.isError || !product) {
     return <Navigate to="/products" replace />
   }
 
@@ -203,7 +164,13 @@ function ProductDetailPage() {
 
           <div className="product-detail__price-row">
             <strong>NGN {product.price.toLocaleString()}</strong>
-            <span className={product.inStock ? 'product-detail__stock' : 'product-detail__stock product-detail__stock--out'}>
+            <span
+              className={
+                product.inStock
+                  ? 'product-detail__stock'
+                  : 'product-detail__stock product-detail__stock--out'
+              }
+            >
               {product.inStock ? 'In stock' : 'Out of stock'}
             </span>
           </div>
@@ -245,7 +212,9 @@ function ProductDetailPage() {
             </article>
             <article>
               <span className="product-detail__fact-label">Stock</span>
-              <strong>{product.stockQuantity > 0 ? `${product.stockQuantity} available` : 'Currently empty'}</strong>
+              <strong>
+                {product.stockQuantity > 0 ? `${product.stockQuantity} available` : 'Currently empty'}
+              </strong>
             </article>
             <article>
               <span className="product-detail__fact-label">Tracking</span>
@@ -273,8 +242,8 @@ function ProductDetailPage() {
           </span>
           <h3>Simple payment</h3>
           <p>
-            The experience stays calm and easy, with payment handled only when the order is
-            ready to continue.
+            The experience stays calm and easy, with payment handled only when the order is ready
+            to continue.
           </p>
         </article>
 

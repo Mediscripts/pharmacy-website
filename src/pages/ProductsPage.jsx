@@ -1,10 +1,32 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useDeferredValue, useMemo, useState } from 'react'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import SectionHeading from '../components/ui/SectionHeading'
 import ProductCard from '../components/home/ProductCard'
-import { categories as fallbackCategories } from '../data/siteContent'
+import { categories as fallbackCategoryNames } from '../data/siteContent'
 import './ProductsPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
+const pageSize = 24
+
+function slugify(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+function fetchJson(url) {
+  return fetch(url).then(async (response) => {
+    const payload = await response.json()
+
+    if (!response.ok) {
+      throw new Error(payload.message || 'Unable to load catalog data.')
+    }
+
+    return payload
+  })
+}
 
 function SearchIcon() {
   return (
@@ -40,93 +62,83 @@ function ProductSkeletonCard() {
 
 function ProductsPage() {
   const [query, setQuery] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [products, setProducts] = useState([])
-  const [availableCategories, setAvailableCategories] = useState(['All', ...fallbackCategories])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const deferredQuery = useDeferredValue(query.trim())
 
-  useEffect(() => {
-    let isMounted = true
+  const categoriesQuery = useQuery({
+    queryKey: ['catalog-categories'],
+    queryFn: () => fetchJson(`${apiBaseUrl}/api/catalog/categories`),
+    staleTime: 24 * 60 * 60 * 1000,
+  })
 
-    const loadCatalog = async () => {
-      setLoading(true)
-      setError('')
+  const categoryOptions = useMemo(() => {
+    const liveCategories = Array.isArray(categoriesQuery.data?.categories)
+      ? categoriesQuery.data.categories
+      : []
 
-      try {
-        const [productsResponse, categoriesResponse] = await Promise.all([
-          fetch(`${apiBaseUrl}/api/catalog/products`),
-          fetch(`${apiBaseUrl}/api/catalog/categories`),
-        ])
+    if (liveCategories.length > 0) {
+      return [
+        { id: 'all', name: 'All' },
+        ...liveCategories.map((category) => ({
+          id: category.id,
+          name: category.name,
+        })),
+      ]
+    }
 
-        const productsPayload = await productsResponse.json()
-        const categoriesPayload = await categoriesResponse.json()
+    return [
+      { id: 'all', name: 'All' },
+      ...fallbackCategoryNames.map((name) => ({
+        id: slugify(name),
+        name,
+      })),
+    ]
+  }, [categoriesQuery.data])
 
-        if (!productsResponse.ok) {
-          throw new Error(productsPayload.message || 'Unable to load products.')
-        }
+  const productsQuery = useInfiniteQuery({
+    queryKey: ['catalog-products', deferredQuery, selectedCategory],
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) => {
+      const params = new URLSearchParams()
+      params.set('page', String(pageParam))
+      params.set('limit', String(pageSize))
 
-        if (isMounted && Array.isArray(productsPayload.products)) {
-          setProducts(
-            productsPayload.products.map((product) => ({
-              id: product.id,
-              slug: product.slug,
-              category: product.category,
-              name: product.name,
-              description: product.description,
-              price: Number(product.price || 0),
-              note: product.prescriptionRequired ? 'Prescription required' : 'Available',
-              image:
-                Array.isArray(product.images) && product.images.length > 0
-                  ? product.images[0]
-                  : '/product-placeholder.svg',
-              inStock: Number(product.stockQuantity || 0) > 0,
-              prescriptionRequired: Boolean(product.prescriptionRequired),
-            })),
-          )
-        }
-
-        if (
-          isMounted &&
-          categoriesResponse.ok &&
-          Array.isArray(categoriesPayload.categories) &&
-          categoriesPayload.categories.length > 0
-        ) {
-          setAvailableCategories([
-            'All',
-            ...categoriesPayload.categories.map((category) => category.name),
-          ])
-        }
-      } catch {
-        if (isMounted) {
-          setError('Unable to load live catalog data right now.')
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false)
-        }
+      if (deferredQuery) {
+        params.set('q', deferredQuery)
       }
-    }
 
-    loadCatalog()
+      if (selectedCategory !== 'all') {
+        params.set('categoryId', selectedCategory)
+      }
 
-    return () => {
-      isMounted = false
-    }
-  }, [])
+      return fetchJson(`${apiBaseUrl}/api/catalog/products?${params.toString()}`)
+    },
+    getNextPageParam: (lastPage) => {
+      if (!lastPage?.hasMore) {
+        return undefined
+      }
 
-  const filteredProducts = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
+      return (lastPage.page || 1) + 1
+    },
+    staleTime: 30 * 1000,
+  })
 
-    return products.filter((product) => {
-      const matchesCategory =
-        selectedCategory === 'All' || product.category === selectedCategory
-      const haystack = `${product.name} ${product.description} ${product.category}`.toLowerCase()
-      const matchesQuery = normalizedQuery === '' || haystack.includes(normalizedQuery)
+  const products = useMemo(
+    () =>
+      productsQuery.data?.pages.flatMap((page) =>
+        page.products.map((product) => ({
+          ...product,
+          image:
+            Array.isArray(product.images) && product.images.length > 0
+              ? product.images[0]
+              : '/product-placeholder.svg',
+        })),
+      ) || [],
+    [productsQuery.data],
+  )
 
-      return matchesCategory && matchesQuery
-    })
-  }, [query, selectedCategory, products])
+  const isLoadingInitial = productsQuery.isLoading
+  const isEmpty = !isLoadingInitial && !productsQuery.isError && products.length === 0
 
   return (
     <div className="page">
@@ -153,57 +165,69 @@ function ProductsPage() {
         </label>
 
         <div className="catalog-chips" role="list" aria-label="Category filters">
-          <button
-            key="All"
-            type="button"
-            className={`catalog-chip${selectedCategory === 'All' ? ' is-active' : ''}`}
-            onClick={() => setSelectedCategory('All')}
-          >
-            All
-          </button>
-          {availableCategories
-            .filter((category) => category !== 'All')
-            .map((category) => (
+          {categoryOptions.map((category) => (
             <button
-              key={category}
+              key={category.id}
               type="button"
-              className={`catalog-chip${selectedCategory === category ? ' is-active' : ''}`}
-              onClick={() => setSelectedCategory(category)}
+              className={`catalog-chip${selectedCategory === category.id ? ' is-active' : ''}`}
+              onClick={() => setSelectedCategory(category.id)}
             >
-              {category}
+              {category.name}
             </button>
           ))}
         </div>
       </section>
 
       <section className="catalog-results" aria-live="polite">
-        {loading ? <p className="catalog-results__count">Loading catalog...</p> : null}
-        {!loading && error ? <p className="catalog-results__count">{error}</p> : null}
-        {!loading ? (
+        {isLoadingInitial ? <p className="catalog-results__count">Loading catalog...</p> : null}
+
+        {productsQuery.isError ? (
           <p className="catalog-results__count">
-            Showing {filteredProducts.length}{' '}
-            {filteredProducts.length === 1 ? 'medicine' : 'medicines'}
+            {productsQuery.error?.message || 'Unable to load products right now.'}
           </p>
         ) : null}
 
-        {loading ? (
+        {!isLoadingInitial && !productsQuery.isError ? (
+          <p className="catalog-results__count">
+            Showing {products.length} {products.length === 1 ? 'medicine' : 'medicines'}
+          </p>
+        ) : null}
+
+        {isLoadingInitial ? (
           <div className="catalog-grid" aria-label="Loading medicines">
             {Array.from({ length: 6 }).map((_, index) => (
               <ProductSkeletonCard key={`skeleton-${index}`} />
             ))}
           </div>
-        ) : filteredProducts.length > 0 ? (
+        ) : null}
+
+        {!isLoadingInitial && !productsQuery.isError && products.length > 0 ? (
           <div className="catalog-grid">
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <ProductCard key={product.id} {...product} />
             ))}
           </div>
-        ) : (
+        ) : null}
+
+        {isEmpty ? (
           <div className="catalog-empty">
             <h3>No products match your search</h3>
             <p>Try a different keyword or choose a different category.</p>
           </div>
-        )}
+        ) : null}
+
+        {productsQuery.hasNextPage ? (
+          <div className="catalog-loadmore">
+            <button
+              type="button"
+              className="catalog-loadmore__button"
+              onClick={() => productsQuery.fetchNextPage()}
+              disabled={productsQuery.isFetchingNextPage}
+            >
+              {productsQuery.isFetchingNextPage ? 'Loading more...' : 'Load more products'}
+            </button>
+          </div>
+        ) : null}
       </section>
     </div>
   )

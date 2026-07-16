@@ -95,6 +95,41 @@
   gap: 18px;
 }
 
+.catalog-loadmore {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.catalog-loadmore__button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.catalog-loadmore__button:hover,
+.catalog-loadmore__button:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(15, 118, 110, 0.24);
+  background: #fff;
+}
+
+.catalog-loadmore__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
 .product-skeleton {
   display: grid;
   gap: 12px;

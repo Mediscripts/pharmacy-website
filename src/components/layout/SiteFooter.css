@@ -18,7 +18,7 @@
 
 .site-footer__eyebrow {
   margin: 0 0 6px;
-  color: #0f766e;
+  color: #38c34d;
   font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.15em;
@@ -46,7 +46,7 @@
 
 .site-footer__links a:hover,
 .site-footer__links a:focus-visible {
-  color: #0f766e;
+  color: #38c34d;
 }
 
 @media (max-width: 760px) {
@@ -59,3 +59,4 @@
     align-items: flex-start;
   }
 }
+

@@ -55,6 +55,23 @@ function AdminCatalogPage() {
     [categories],
   )
 
+  const catalogStats = useMemo(() => {
+    const activeCategories = categories.filter((category) => category.is_active !== false).length
+    const prescriptionItems = normalizedProducts.filter((product) => product.prescription_required).length
+    const lowStockItems = normalizedProducts.filter((product) => {
+      const stock = Number(product.stock_quantity || 0)
+      return stock > 0 && stock <= 10
+    }).length
+    const outOfStockItems = normalizedProducts.filter((product) => Number(product.stock_quantity || 0) === 0).length
+
+    return [
+      { label: 'Medicines', value: normalizedProducts.length },
+      { label: 'Active categories', value: activeCategories },
+      { label: 'Prescription items', value: prescriptionItems },
+      { label: 'Stock alerts', value: lowStockItems + outOfStockItems },
+    ]
+  }, [categories, normalizedProducts])
+
   useEffect(() => {
     if (loading || !isAdmin || !accessToken) {
       return undefined
@@ -178,26 +195,44 @@ function AdminCatalogPage() {
   return (
     <main className="admin-shell">
       <section className="admin-hero">
-        <div>
-          <p className="admin-kicker">Admin tools</p>
-          <h1>Catalog management</h1>
+        <div className="admin-hero__copy">
+          <p className="admin-kicker">Catalog workspace</p>
+          <h1>Keep the medicine list easy to browse.</h1>
+          <p>
+            Update product details, move medicines between categories, and keep the shop tidy for
+            the team and for customers.
+          </p>
+          <div className="admin-hero__actions">
+            <Link className="admin-button admin-button--ghost" to="/admin">
+              Back to dashboard
+            </Link>
+            <button
+              type="button"
+              className="admin-button admin-button--ghost"
+              onClick={() => navigate('/admin/catalog/new')}
+            >
+              Add medicine
+            </button>
+            <button
+              type="button"
+              className="admin-button admin-button--ghost"
+              onClick={() => setActiveTab('categories')}
+            >
+              Open categories
+            </button>
+          </div>
         </div>
 
-        <div className="admin-hero__actions">
-          <button
-            type="button"
-            className="admin-button admin-button--ghost"
-            onClick={() => navigate('/admin/catalog/new')}
-          >
-            Add product
-          </button>
-          <button
-            type="button"
-            className="admin-button admin-button--ghost"
-            onClick={() => setActiveTab('categories')}
-          >
-            Manage categories
-          </button>
+        <div className="catalog-hero__panel">
+          <p className="catalog-hero__panel-label">At a glance</p>
+          <div className="catalog-stats">
+            {catalogStats.map((stat) => (
+              <article key={stat.label} className="catalog-stat">
+                <span>{stat.label}</span>
+                <strong>{stat.value}</strong>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -249,6 +284,17 @@ function AdminCatalogPage() {
 
       {activeTab === 'products' ? (
         <section className="catalog-view">
+          <div className="catalog-view__header">
+            <div>
+              <p className="catalog-section-kicker">Products</p>
+              <h2>Browse the current lineup</h2>
+            </div>
+            <p className="catalog-view__note">
+              Click any item to open its page, update details, or make changes to the images and
+              stock.
+            </p>
+          </div>
+
           <div className="admin-grid admin-grid--list">
             {visibleProducts.map((product) => (
               <Link key={product.id} to={`/admin/catalog/${product.id}`} className="product-tile product-tile--link">
@@ -286,6 +332,16 @@ function AdminCatalogPage() {
         </section>
       ) : (
         <section className="admin-category-layout">
+          <div className="catalog-view__header">
+            <div>
+              <p className="catalog-section-kicker">Categories</p>
+              <h2>Shape the shelves behind the scenes</h2>
+            </div>
+            <p className="catalog-view__note">
+              Give the team a clean structure so products stay grouped and easy to manage.
+            </p>
+          </div>
+
           <form className="drawer-card" onSubmit={handleCategorySubmit}>
             <div className="drawer-card__header">
               <div>
@@ -326,7 +382,7 @@ function AdminCatalogPage() {
 
           {categories.length > 0 ? (
             <div>
-              <h2 style={{ margin: '0 0 1rem', fontSize: '1.2rem' }}>Categories ({categories.length})</h2>
+              <h2 className="catalog-section-title">Categories ({categories.length})</h2>
               <div className="category-grid">
                 {categories.map((category) => (
                   <article className="category-card" key={category.id}>

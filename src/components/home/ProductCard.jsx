@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import useCart from '../../context/useCart'
+import { Link } from 'react-router-dom'
 import './ProductCard.css'
 
 function ProductCard({
@@ -9,7 +8,6 @@ function ProductCard({
   name,
   description,
   price,
-  note,
   image,
   inStock,
   prescriptionRequired,
@@ -17,7 +15,6 @@ function ProductCard({
   images,
 }) {
   const { addToCart } = useCart()
-  const [feedback, setFeedback] = useState('')
   const productPath = `/products/${slug || id}`
   const imageSource =
     image || (Array.isArray(images) && images.length > 0 ? images[0] : '/product-placeholder.svg')
@@ -33,24 +30,14 @@ function ProductCard({
       name,
       description,
       price,
-      note,
       image,
       inStock,
       prescriptionRequired,
     })
-    setFeedback('Added to cart')
   }
 
-  useEffect(() => {
-    if (!feedback) {
-      return undefined
-    }
-
-    const timeoutId = window.setTimeout(() => setFeedback(''), 1200)
-    return () => window.clearTimeout(timeoutId)
-  }, [feedback])
-
   const isOutOfStock = inStock === false
+  const isPrescriptionItem = Boolean(prescriptionRequired)
 
   return (
     <article className="product-card">
@@ -85,15 +72,22 @@ function ProductCard({
         <p>{description}</p>
 
         <div className="product-card__footer">
-          <strong>NGN {price.toLocaleString()}</strong>
-          {isOutOfStock ? (
-            <span className="product-card__stock product-card__stock--out">Out of stock</span>
-          ) : (
-            <button type="button" className="product-card__button" onClick={handleAdd}>
-              {feedback || 'Add to cart'}
-            </button>
-          )}
-        </div>
+        <strong>NGN {price.toLocaleString()}</strong>
+        {isOutOfStock ? (
+          <span className="product-card__stock product-card__stock--out">Out of stock</span>
+        ) : isPrescriptionItem ? (
+          <div className="product-card__action-copy">
+            <span className="product-card__action-label">Prescription required</span>
+            <Link className="product-card__visit-link" to="/contact">
+              Visit our store
+            </Link>
+          </div>
+        ) : (
+          <button type="button" className="product-card__button" onClick={handleAdd}>
+            Add to cart
+          </button>
+        )}
+      </div>
       </div>
     </article>
   )

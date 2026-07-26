@@ -27,7 +27,7 @@
   letter-spacing: 0.14em;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #0f766e;
+  color: #38c34d;
 }
 
 .confirmation-panel {
@@ -60,6 +60,15 @@
   color: #1d4ed8;
 }
 
+.confirmation-error {
+  margin-top: 1rem;
+  padding: 0.95rem 1rem;
+  border-radius: 14px;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
 .confirmation-actions {
   display: flex;
   gap: 0.75rem;
@@ -68,8 +77,8 @@
 }
 
 .confirmation-button {
-  border: 1px solid #0f766e;
-  background: #0f766e;
+  border: 1px solid #38c34d;
+  background: #38c34d;
   color: #fff;
   border-radius: 999px;
   padding: 0.85rem 1.15rem;
@@ -79,7 +88,7 @@
 }
 
 .confirmation-link {
-  color: #0f766e;
+  color: #38c34d;
   text-decoration: none;
   font-weight: 700;
   align-self: center;
@@ -90,3 +99,4 @@
     grid-template-columns: 1fr;
   }
 }
+

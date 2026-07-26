@@ -81,8 +81,8 @@
 .site-nav__link:hover,
 .site-nav__link:focus-visible,
 .site-nav__link.is-active {
-  color: #0f766e;
-  background: rgba(15, 118, 110, 0.1);
+  color: #38c34d;
+  background: rgba(56, 195, 77, 0.1);
 }
 
 .site-header__actions {
@@ -100,7 +100,7 @@
   height: 46px;
   border-radius: 999px;
   color: #0f172a;
-  background: rgba(15, 118, 110, 0.1);
+  background: rgba(56, 195, 77, 0.1);
   text-decoration: none;
 }
 
@@ -126,7 +126,7 @@
   padding: 0 6px;
   border-radius: 999px;
   color: #fff;
-  background: #0f766e;
+  background: #38c34d;
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -135,10 +135,10 @@
   padding: 12px 18px;
   border-radius: 999px;
   color: #fff;
-  background: linear-gradient(135deg, #0f766e, #134e4a);
+  background: linear-gradient(135deg, #38c34d, #2ea53f);
   text-decoration: none;
   font-weight: 700;
-  box-shadow: 0 14px 30px rgba(15, 118, 110, 0.24);
+  box-shadow: 0 14px 30px rgba(56, 195, 77, 0.24);
 }
 
 .site-header__mini-cart {
@@ -187,8 +187,8 @@
   border: 0;
   border-radius: 999px;
   padding: 7px 10px;
-  background: rgba(15, 118, 110, 0.12);
-  color: #0f766e;
+  background: rgba(56, 195, 77, 0.12);
+  color: #38c34d;
   cursor: pointer;
 }
 
@@ -207,7 +207,7 @@
   color: #fff;
   text-decoration: none;
   font-weight: 700;
-  background: linear-gradient(135deg, #0f766e, #134e4a);
+  background: linear-gradient(135deg, #38c34d, #2ea53f);
 }
 
 @media (max-width: 960px) {
@@ -268,3 +268,4 @@
     width: clamp(138px, 52vw, 180px);
   }
 }
+

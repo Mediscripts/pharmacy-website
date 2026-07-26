@@ -219,6 +219,9 @@ function AdminProductPage() {
           Back to catalog
         </Link>
         <div className="product-topbar__actions">
+          <Link className="product-action product-action--ghost" to="/admin">
+            Back to dashboard
+          </Link>
           <button type="button" className="product-action product-action--ghost" onClick={() => navigate('/admin/catalog/new')}>
             New product
           </button>

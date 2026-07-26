@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import './AdminInventoryPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
 
@@ -27,6 +28,24 @@ function AdminInventoryPage() {
     () => new Map(products.map((product) => [product.id, product])),
     [products],
   )
+
+  const inventoryStats = useMemo(() => {
+    const totalProducts = products.length
+    const activeProducts = products.filter((product) => product.is_active !== false).length
+    const lowStockProducts = products.filter((product) => {
+      const stock = Number(product.stock_quantity || 0)
+      return stock > 0 && stock <= 10
+    }).length
+    const outOfStockProducts = products.filter((product) => Number(product.stock_quantity || 0) === 0).length
+
+    return [
+      { label: 'Products tracked', value: totalProducts },
+      { label: 'Active products', value: activeProducts },
+      { label: 'Low stock', value: lowStockProducts },
+      { label: 'Out of stock', value: outOfStockProducts },
+      { label: 'Recent movements', value: movements.length },
+    ]
+  }, [movements.length, products])
 
   useEffect(() => {
     if (loading || !isAdmin || !accessToken) {
@@ -118,8 +137,12 @@ function AdminInventoryPage() {
 
   if (loading) {
     return (
-      <main style={{ maxWidth: '960px', margin: '4rem auto', padding: '2rem' }}>
-        Loading admin access...
+      <main className="inventory-shell">
+        <section className="inventory-state-card">
+          <p className="inventory-kicker">Back office</p>
+          <h1>Loading inventory...</h1>
+          <p>Give us a moment while we open the stock room.</p>
+        </section>
       </main>
     )
   }
@@ -129,188 +152,173 @@ function AdminInventoryPage() {
   }
 
   return (
-    <main
-      style={{
-        maxWidth: '1120px',
-        margin: '4rem auto',
-        padding: '2rem',
-        border: '1px solid #e2e8f0',
-        borderRadius: '16px',
-        background: '#fff',
-      }}
-    >
-      <header style={{ marginBottom: '2rem' }}>
-        <p style={{ margin: 0, color: '#0f766e', fontWeight: 600 }}>Admin tools</p>
-        <h1 style={{ margin: '0.25rem 0 0' }}>Inventory management</h1>
-        <p style={{ color: '#475569', marginBottom: 0 }}>
-          Adjust stock levels, record movement reasons, and keep a traceable inventory history.
-        </p>
-      </header>
+    <main className="inventory-shell">
+      <section className="inventory-hero">
+        <div className="inventory-hero__copy">
+          <p className="inventory-kicker">Stock room</p>
+          <h1>Keep the shelf count honest.</h1>
+          <p>
+            Adjust stock, leave a clear reason, and keep a tidy record of every movement that
+            matters.
+          </p>
 
-      {pageLoading ? <p>Loading inventory data...</p> : null}
-      {pageError ? <p style={{ color: '#b91c1c' }}>{pageError}</p> : null}
-      {message ? <p style={{ color: '#0f766e' }}>{message}</p> : null}
-
-      <section
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(280px, 360px) 1fr',
-          gap: '1.5rem',
-          alignItems: 'start',
-        }}
-      >
-        <form
-          onSubmit={handleSubmit}
-          style={{
-            border: '1px solid #e2e8f0',
-            borderRadius: '16px',
-            padding: '1.25rem',
-            background: '#f8fafc',
-            display: 'grid',
-            gap: '0.9rem',
-          }}
-        >
-          <h2 style={{ marginTop: 0 }}>Adjust stock</h2>
-          <label style={{ display: 'grid', gap: '0.3rem' }}>
-            <span>Product</span>
-            <select
-              value={form.productId}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, productId: event.target.value }))
-              }
-              required
-              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+          <div className="inventory-hero__actions">
+            <Link className="inventory-button inventory-button--ghost" to="/admin">
+              Back to dashboard
+            </Link>
+            <button
+              type="button"
+              className="inventory-button inventory-button--ghost"
+              onClick={() => setRefreshKey((current) => current + 1)}
             >
-              <option value="">Select product</option>
-              {products.map((product) => (
-                <option key={product.id} value={product.id}>
-                  {product.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label style={{ display: 'grid', gap: '0.3rem' }}>
-            <span>Delta</span>
-            <input
-              type="number"
-              step="1"
-              value={form.delta}
-              onChange={(event) => setForm((current) => ({ ...current, delta: event.target.value }))}
-              placeholder="Use negative values to reduce stock"
-              required
-              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
-            />
-          </label>
-          <label style={{ display: 'grid', gap: '0.3rem' }}>
-            <span>Reason</span>
-            <input
-              value={form.reason}
-              onChange={(event) => setForm((current) => ({ ...current, reason: event.target.value }))}
-              required
-              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
-            />
-          </label>
-          <label style={{ display: 'grid', gap: '0.3rem' }}>
-            <span>Reference type</span>
-            <input
-              value={form.referenceType}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, referenceType: event.target.value }))
-              }
-              placeholder="Order, shipment, adjustment"
-              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
-            />
-          </label>
-          <label style={{ display: 'grid', gap: '0.3rem' }}>
-            <span>Reference ID</span>
-            <input
-              value={form.referenceId}
-              onChange={(event) =>
-                setForm((current) => ({ ...current, referenceId: event.target.value }))
-              }
-              placeholder="Optional record ID"
-              style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #cbd5e1' }}
-            />
-          </label>
-          <button
-            type="submit"
-            disabled={saving}
-            style={{
-              padding: '0.85rem',
-              border: 0,
-              borderRadius: '999px',
-              background: saving ? '#5e9f99' : '#0f766e',
-              color: '#fff',
-              cursor: saving ? 'wait' : 'pointer',
-            }}
-          >
-            {saving ? 'Saving...' : 'Update stock'}
-          </button>
+              Refresh stock
+            </button>
+          </div>
+        </div>
+
+        <div className="inventory-hero__panel">
+          <p className="inventory-panel-label">At a glance</p>
+          <div className="inventory-stats">
+            {inventoryStats.map((stat) => (
+              <article key={stat.label} className="inventory-stat">
+                <span>{stat.label}</span>
+                <strong>{stat.value}</strong>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {pageLoading ? <p className="inventory-helper">Loading inventory data...</p> : null}
+      {pageError ? <p className="inventory-error">{pageError}</p> : null}
+      {message ? <p className="inventory-success">{message}</p> : null}
+
+      <section className="inventory-layout">
+        <form className="inventory-card inventory-form" onSubmit={handleSubmit}>
+          <div className="inventory-card__header">
+            <div>
+              <p className="inventory-section-kicker">Adjust stock</p>
+              <h2>Update a product</h2>
+            </div>
+          </div>
+
+          <div className="inventory-form-grid">
+            <label>
+              <span>Product</span>
+              <select
+                value={form.productId}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, productId: event.target.value }))
+                }
+                required
+              >
+                <option value="">Select product</option>
+                {products.map((product) => (
+                  <option key={product.id} value={product.id}>
+                    {product.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              <span>Delta</span>
+              <input
+                type="number"
+                step="1"
+                value={form.delta}
+                onChange={(event) => setForm((current) => ({ ...current, delta: event.target.value }))}
+                placeholder="Use negative values to reduce stock"
+                required
+              />
+            </label>
+
+            <label className="inventory-form__wide">
+              <span>Reason</span>
+              <input
+                value={form.reason}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, reason: event.target.value }))
+                }
+                placeholder="For example: delivery received"
+                required
+              />
+            </label>
+
+            <label>
+              <span>Reference type</span>
+              <input
+                value={form.referenceType}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, referenceType: event.target.value }))
+                }
+                placeholder="Order, shipment, adjustment"
+              />
+            </label>
+
+            <label>
+              <span>Reference ID</span>
+              <input
+                value={form.referenceId}
+                onChange={(event) =>
+                  setForm((current) => ({ ...current, referenceId: event.target.value }))
+                }
+                placeholder="Optional record ID"
+              />
+            </label>
+          </div>
+
+          <div className="inventory-form__actions">
+            <button type="submit" className="inventory-button" disabled={saving}>
+              {saving ? 'Saving...' : 'Save movement'}
+            </button>
+          </div>
         </form>
 
-        <div style={{ display: 'grid', gap: '1rem' }}>
-          <article
-            style={{
-              border: '1px solid #e2e8f0',
-              borderRadius: '16px',
-              padding: '1rem',
-              background: '#fff',
-            }}
-          >
-            <h2 style={{ marginTop: 0 }}>Current stock</h2>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                gap: '0.75rem',
-              }}
-            >
+        <div className="inventory-stack">
+          <article className="inventory-card">
+            <div className="inventory-card__header">
+              <div>
+                <p className="inventory-section-kicker">Current stock</p>
+                <h2>What is on hand</h2>
+              </div>
+            </div>
+
+            <div className="inventory-stock-grid">
               {products.map((product) => (
-                <div
-                  key={product.id}
-                  style={{
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '14px',
-                    padding: '0.85rem',
-                    background: '#f8fafc',
-                  }}
-                >
-                  <p style={{ margin: 0, color: '#64748b' }}>{product.name}</p>
+                <div key={product.id} className="inventory-stock-card">
+                  <p>{product.name}</p>
                   <strong>{product.stock_quantity} units</strong>
                 </div>
               ))}
             </div>
           </article>
 
-          <article
-            style={{
-              border: '1px solid #e2e8f0',
-              borderRadius: '16px',
-              padding: '1rem',
-              background: '#fff',
-            }}
-          >
-            <h2 style={{ marginTop: 0 }}>Recent movements</h2>
-            <div style={{ display: 'grid', gap: '0.85rem' }}>
+          <article className="inventory-card">
+            <div className="inventory-card__header">
+              <div>
+                <p className="inventory-section-kicker">Movement log</p>
+                <h2>Recent changes</h2>
+              </div>
+            </div>
+
+            <div className="inventory-log">
               {movements.map((movement) => {
                 const product = productLookup.get(movement.product_id)
 
                 return (
-                  <div
-                    key={movement.id}
-                    style={{
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '14px',
-                      padding: '0.85rem',
-                      background: '#f8fafc',
-                    }}
-                  >
-                    <strong>{product?.name || 'Unknown product'}</strong>
-                    <p style={{ margin: '0.25rem 0 0', color: '#475569' }}>
-                      {movement.delta > 0 ? '+' : ''}
-                      {movement.delta} units
-                    </p>
-                    <p style={{ margin: '0.25rem 0 0', color: '#475569' }}>{movement.reason}</p>
+                  <div key={movement.id} className="inventory-log__row">
+                    <div>
+                      <strong>{product?.name || 'Unknown product'}</strong>
+                      <p>{movement.reason}</p>
+                    </div>
+                    <div className="inventory-log__delta">
+                      <strong>
+                        {movement.delta > 0 ? '+' : ''}
+                        {movement.delta}
+                      </strong>
+                      <span>units</span>
+                    </div>
                   </div>
                 )
               })}

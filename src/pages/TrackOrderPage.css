@@ -48,7 +48,7 @@
   border: 0;
   border-radius: 999px;
   color: #fff;
-  background: linear-gradient(135deg, #0f766e, #134e4a);
+  background: linear-gradient(135deg, #38c34d, #2ea53f);
   font: inherit;
   font-weight: 700;
 }
@@ -76,3 +76,4 @@
     grid-template-columns: 1fr;
   }
 }
+

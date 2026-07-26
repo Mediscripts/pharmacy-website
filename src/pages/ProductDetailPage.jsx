@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import useCart from '../context/useCart'
@@ -86,7 +85,6 @@ function DetailIcon({ name }) {
 function ProductDetailPage() {
   const { productSlug } = useParams()
   const { addToCart } = useCart()
-  const [feedback, setFeedback] = useState('')
 
   const productQuery = useQuery({
     queryKey: ['catalog-product', productSlug],
@@ -96,15 +94,6 @@ function ProductDetailPage() {
   })
 
   const product = productQuery.data?.product ? normalizeProduct(productQuery.data.product) : null
-
-  useEffect(() => {
-    if (!feedback) {
-      return undefined
-    }
-
-    const timeoutId = window.setTimeout(() => setFeedback(''), 1200)
-    return () => window.clearTimeout(timeoutId)
-  }, [feedback])
 
   if (productQuery.isLoading) {
     return (
@@ -124,7 +113,6 @@ function ProductDetailPage() {
     }
 
     addToCart(product)
-    setFeedback('Added to cart')
   }
 
   return (
@@ -177,9 +165,15 @@ function ProductDetailPage() {
 
           <div className="product-detail__actions">
             {product.inStock ? (
-              <button type="button" className="product-detail__button" onClick={handleAddToCart}>
-                {feedback || 'Add to cart'}
-              </button>
+              product.prescriptionRequired ? (
+                <Link className="product-detail__button" to="/contact">
+                  Visit our store
+                </Link>
+              ) : (
+                <button type="button" className="product-detail__button" onClick={handleAddToCart}>
+                  Add to cart
+                </button>
+              )
             ) : (
               <button type="button" className="product-detail__button" disabled>
                 Unavailable
@@ -196,10 +190,10 @@ function ProductDetailPage() {
               <DetailIcon name={product.prescriptionRequired ? 'shield' : 'delivery'} />
             </div>
             <div>
-              <h2>{product.prescriptionRequired ? 'Prescription review' : 'Easy ordering'}</h2>
+              <h2>{product.prescriptionRequired ? 'Prescription required' : 'Easy ordering'}</h2>
               <p>
                 {product.prescriptionRequired
-                  ? 'This medicine will move through a prescription review step before it can continue to payment and delivery.'
+                  ? 'This medicine is only available in-store. Please visit our pharmacy with your prescription so we can assist you directly.'
                   : 'You can add this medicine to your cart and continue through checkout when you are ready.'}
               </p>
             </div>
@@ -229,10 +223,11 @@ function ProductDetailPage() {
           <span className="product-detail__support-icon">
             <DetailIcon name="shield" />
           </span>
-          <h3>Safe checkout flow</h3>
+          <h3>{product.prescriptionRequired ? 'Visit our store' : 'Safe checkout flow'}</h3>
           <p>
-            Regular medicines move straight to payment. Prescription items follow review first,
-            then you receive the next step by email.
+            {product.prescriptionRequired
+              ? 'This item is handled in-store for now. Please bring your prescription to the pharmacy for assistance.'
+              : 'Regular medicines move straight to payment. Prescription items are handled separately.'}
           </p>
         </article>
 

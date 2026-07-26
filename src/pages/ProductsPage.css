@@ -28,7 +28,7 @@
 }
 
 .catalog-search__icon {
-  color: #0f766e;
+  color: #38c34d;
   font-size: 1rem;
   display: inline-flex;
   align-items: center;
@@ -62,7 +62,7 @@
 
 .catalog-chip {
   padding: 10px 14px;
-  border: 1px solid rgba(15, 118, 110, 0.16);
+  border: 1px solid rgba(56, 195, 77, 0.16);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.82);
   color: #0f172a;
@@ -74,7 +74,7 @@
 
 .catalog-chip.is-active {
   color: #fff;
-  background: linear-gradient(135deg, #0f766e, #134e4a);
+  background: linear-gradient(135deg, #38c34d, #2ea53f);
   border-color: transparent;
 }
 
@@ -120,7 +120,7 @@
 .catalog-loadmore__button:hover,
 .catalog-loadmore__button:focus-visible {
   transform: translateY(-1px);
-  border-color: rgba(15, 118, 110, 0.24);
+  border-color: rgba(56, 195, 77, 0.24);
   background: #fff;
 }
 
@@ -240,3 +240,4 @@
     grid-template-columns: 1fr;
   }
 }
+

@@ -4,6 +4,9 @@ import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminCatalogPage from './pages/AdminCatalogPage'
 import AdminProductPage from './pages/AdminProductPage'
 import AdminInventoryPage from './pages/AdminInventoryPage'
+import AdminPaymentsPage from './pages/AdminPaymentsPage'
+import AdminOrdersPage from './pages/AdminOrdersPage'
+import AdminOrderPage from './pages/AdminOrderPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import CheckoutPage from './pages/CheckoutPage'
 import HomePage from './pages/HomePage'
@@ -24,6 +27,9 @@ function App() {
         <Route path="admin/catalog" element={<AdminCatalogPage />} />
         <Route path="admin/catalog/:productId" element={<AdminProductPage />} />
         <Route path="admin/inventory" element={<AdminInventoryPage />} />
+        <Route path="admin/payments" element={<AdminPaymentsPage />} />
+        <Route path="admin/orders" element={<AdminOrdersPage />} />
+        <Route path="admin/orders/:orderId" element={<AdminOrderPage />} />
 
         <Route element={<SiteLayout />}>
           <Route index element={<HomePage />} />

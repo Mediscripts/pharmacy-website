@@ -1,0 +1,138 @@
+.admin-metrics {
+  margin-top: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.admin-metric-card {
+  border: 1px solid #dbe4ea;
+  border-radius: 20px;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.04);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.admin-metric-card span {
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.admin-metric-card strong {
+  color: #0f172a;
+  font-size: 1.25rem;
+}
+
+.payments-panel {
+  margin-top: 1.25rem;
+  border: 1px solid #dbe4ea;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.payments-table {
+  display: grid;
+}
+
+.payments-table__head,
+.payments-table__row {
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr 1.2fr 0.9fr 0.8fr 0.9fr;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem 1.1rem;
+}
+
+.payments-table__head {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.payments-table__row {
+  border-top: 1px solid #e2e8f0;
+}
+
+.payments-table__row strong,
+.payments-table__row p {
+  margin: 0;
+}
+
+.payments-table__row p {
+  color: #64748b;
+  font-size: 0.86rem;
+  margin-top: 0.22rem;
+}
+
+.payments-reference {
+  word-break: break-all;
+}
+
+.payments-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.payments-status--verified {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.payments-status--pending {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.payments-status--failed {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.payments-status--refunded {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+@media (max-width: 1180px) {
+  .admin-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .payments-table__head,
+  .payments-table__row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .payments-table__head span:nth-child(n + 3) {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .admin-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .payments-table__head {
+    display: none;
+  }
+
+  .payments-table__row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}

@@ -23,7 +23,7 @@
 
 .contact-card p {
   margin: 0 0 8px;
-  color: #0f766e;
+  color: #38c34d;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -40,3 +40,4 @@
     grid-template-columns: 1fr;
   }
 }
+

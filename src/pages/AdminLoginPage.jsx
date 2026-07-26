@@ -82,7 +82,7 @@ function AdminLoginPage() {
             padding: '0.8rem',
             border: 0,
             borderRadius: '999px',
-            background: submitting ? '#5e9f99' : '#0f766e',
+            background: submitting ? '#5e9f99' : '#38c34d',
             color: '#fff',
             cursor: submitting ? 'wait' : 'pointer',
           }}
@@ -95,3 +95,4 @@ function AdminLoginPage() {
 }
 
 export default AdminLoginPage
+

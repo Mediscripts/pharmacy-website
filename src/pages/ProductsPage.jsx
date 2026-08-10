@@ -187,12 +187,6 @@ function ProductsPage() {
           </p>
         ) : null}
 
-        {!isLoadingInitial && !productsQuery.isError ? (
-          <p className="catalog-results__count">
-            Showing {products.length} {products.length === 1 ? 'medicine' : 'medicines'}
-          </p>
-        ) : null}
-
         {isLoadingInitial ? (
           <div className="catalog-grid" aria-label="Loading medicines">
             {Array.from({ length: 6 }).map((_, index) => (

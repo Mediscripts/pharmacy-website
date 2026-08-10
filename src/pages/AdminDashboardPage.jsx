@@ -147,12 +147,18 @@ function AdminDashboardPage() {
             <Link className="admin-button admin-button--ghost" to="/admin/inventory">
               Check inventory
             </Link>
-            <Link className="admin-button admin-button--ghost" to="/admin/payments">
-              View payments
-            </Link>
-            <Link className="admin-button admin-button--ghost" to="/products">
-              Back to site
-            </Link>
+          <Link className="admin-button admin-button--ghost" to="/admin/payments">
+            View payments
+          </Link>
+          <Link className="admin-button admin-button--ghost" to="/admin/payment-settings">
+            Transfer details
+          </Link>
+          <Link className="admin-button admin-button--ghost" to="/admin/logs">
+            Activity log
+          </Link>
+          <Link className="admin-button admin-button--ghost" to="/products">
+            Back to site
+          </Link>
           </div>
         </div>
 
@@ -210,6 +216,22 @@ function AdminDashboardPage() {
           description="Review recent payments, spot what is pending, and keep an eye on anything that needs attention."
           cta="Review payments"
           icon="payments"
+        />
+        <ActionCard
+          to="/admin/payment-settings"
+          eyebrow="Transfer"
+          title="Keep bank details current"
+          description="Update the account name, account number, and transfer instructions whenever they change."
+          cta="Open transfer settings"
+          icon="payments"
+        />
+        <ActionCard
+          to="/admin/logs"
+          eyebrow="Audit trail"
+          title="See every admin action"
+          description="Check who changed orders, products, payments, and transfer settings from one place."
+          cta="Open activity log"
+          icon="orders"
         />
         <ActionCard
           to="/admin/orders"

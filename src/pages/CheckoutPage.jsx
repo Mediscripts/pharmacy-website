@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import useCart from '../context/useCart'
 import './CheckoutPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
 
 function CheckoutPage() {
+  const navigate = useNavigate()
   const { items, subtotal } = useCart()
   const [form, setForm] = useState({
     customerName: '',
@@ -13,6 +14,7 @@ function CheckoutPage() {
     customerPhone: '',
     deliveryAddress: '',
   })
+  const [paymentMethod, setPaymentMethod] = useState('transfer')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -20,6 +22,18 @@ function CheckoutPage() {
     () => items.some((item) => item.prescriptionRequired),
     [items],
   )
+
+  const getTransferPath = (value, orderNumber) => {
+    if (typeof value === 'string' && value.trim()) {
+      try {
+        return new URL(value).pathname
+      } catch {
+        return value.startsWith('/') ? value : `/${value}`
+      }
+    }
+
+    return `/checkout/transfer/${orderNumber}`
+  }
 
   if (items.length === 0) {
     return <Navigate to="/cart" replace />
@@ -38,6 +52,7 @@ function CheckoutPage() {
         },
         body: JSON.stringify({
           ...form,
+          paymentMethod,
           items: items.map((item) => ({
             productId: item.id,
             quantity: item.quantity,
@@ -49,6 +64,17 @@ function CheckoutPage() {
 
       if (!response.ok) {
         throw new Error(payload.message || 'Unable to create your order.')
+      }
+
+      if (paymentMethod === 'transfer') {
+        navigate(getTransferPath(payload.transfer?.receiptPath || payload.transfer?.receiptUrl, payload.order?.order_number), {
+          state: {
+            order: payload.order,
+            transfer: payload.transfer,
+          },
+          replace: true,
+        })
+        return
       }
 
       if (!payload.payment?.authorizationUrl) {
@@ -130,9 +156,40 @@ function CheckoutPage() {
             </label>
           </div>
 
+          <div className="checkout-payment-methods">
+            <div className="checkout-payment-methods__head">
+              <h3>Choose a payment method</h3>
+              <p>Transfer is available now. Paystack is coming soon.</p>
+            </div>
+
+            <div className="checkout-payment-grid">
+              <button
+                type="button"
+                className={`checkout-payment-card${paymentMethod === 'transfer' ? ' is-active' : ''}`}
+                onClick={() => setPaymentMethod('transfer')}
+              >
+                <span className="checkout-payment-card__badge">Available now</span>
+                <strong>Bank transfer</strong>
+                <p>Use our account details and submit your receipt after payment.</p>
+              </button>
+
+              <button
+                type="button"
+                className="checkout-payment-card checkout-payment-card--disabled"
+                disabled
+              >
+                <span className="checkout-payment-card__badge checkout-payment-card__badge--muted">
+                  Coming soon
+                </span>
+                <strong>Paystack</strong>
+                <p>We are still preparing the online card payment experience.</p>
+              </button>
+            </div>
+          </div>
+
           <div className="checkout-actions">
             <button type="submit" className="checkout-button" disabled={loading || hasPrescriptionItems}>
-              {loading ? 'Processing...' : 'Proceed to payment'}
+              {loading ? 'Processing...' : paymentMethod === 'transfer' ? 'Continue with transfer' : 'Proceed to payment'}
             </button>
             <Link className="checkout-link" to="/cart">
               Back to cart

@@ -21,7 +21,6 @@ function AuthProvider({ children }) {
       .maybeSingle()
 
     if (error) {
-      console.error('Failed to load profile', error)
       setUser({ id: session.user.id, email: session.user.email ?? '', role: 'customer' })
       return
     }

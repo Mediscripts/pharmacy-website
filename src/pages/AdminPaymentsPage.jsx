@@ -152,36 +152,38 @@ function AdminPaymentsPage() {
               <span>Created</span>
             </div>
 
-            {payments.map((payment) => (
-              <article key={payment.id} className="payments-table__row">
-                <div>
-                  <strong>{payment.order?.order_number || 'Unknown order'}</strong>
-                  <p>{payment.order?.payment_status || payment.status}</p>
-                </div>
-                <div>
-                  <strong>{payment.order?.customer_name || 'Unknown customer'}</strong>
-                  <p>{payment.order?.customer_email || 'No email available'}</p>
-                </div>
-                <div>
-                  <strong className="payments-reference">{payment.reference}</strong>
-                </div>
-                <div>
-                  <span
-                    className={`payments-status payments-status--${String(
-                      payment.status || 'pending',
-                    ).toLowerCase()}`}
-                  >
-                    {payment.status || 'Pending'}
-                  </span>
-                </div>
-                <div>
-                  <strong>{formatCurrency(payment.amount)}</strong>
-                </div>
-                <div>
-                  <strong>{formatDate(payment.created_at)}</strong>
-                </div>
-              </article>
-            ))}
+              {payments.map((payment) => (
+                <article key={payment.id} className="payments-table__row">
+                  <div>
+                    <strong>{payment.order?.order_number || 'Unknown order'}</strong>
+                    <p>{payment.order?.payment_status || payment.status}</p>
+                  </div>
+                  <div>
+                    <strong>{payment.order?.customer_name || 'Unknown customer'}</strong>
+                    <p>{payment.order?.customer_email || 'No email available'}</p>
+                  </div>
+                  <div>
+                    <strong className="payments-reference">{payment.reference}</strong>
+                    <p>{payment.payment_method === 'transfer' ? 'Manual transfer' : 'Paystack'}</p>
+                  </div>
+                  <div>
+                    <span
+                      className={`payments-status payments-status--${String(
+                        payment.status || 'pending',
+                      ).toLowerCase()}`}
+                    >
+                      {payment.status || 'Pending'}
+                    </span>
+                    <p>{payment.receipt_status || 'No receipt yet'}</p>
+                  </div>
+                  <div>
+                    <strong>{formatCurrency(payment.amount)}</strong>
+                  </div>
+                  <div>
+                    <strong>{formatDate(payment.created_at)}</strong>
+                  </div>
+                </article>
+              ))}
           </div>
         ) : (
           <div className="admin-empty">

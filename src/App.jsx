@@ -5,10 +5,13 @@ import AdminCatalogPage from './pages/AdminCatalogPage'
 import AdminProductPage from './pages/AdminProductPage'
 import AdminInventoryPage from './pages/AdminInventoryPage'
 import AdminPaymentsPage from './pages/AdminPaymentsPage'
+import AdminPaymentSettingsPage from './pages/AdminPaymentSettingsPage'
+import AdminLogsPage from './pages/AdminLogsPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 import AdminOrderPage from './pages/AdminOrderPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import CheckoutPage from './pages/CheckoutPage'
+import TransferPaymentPage from './pages/TransferPaymentPage'
 import HomePage from './pages/HomePage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import ProductsPage from './pages/ProductsPage'
@@ -28,6 +31,8 @@ function App() {
         <Route path="admin/catalog/:productId" element={<AdminProductPage />} />
         <Route path="admin/inventory" element={<AdminInventoryPage />} />
         <Route path="admin/payments" element={<AdminPaymentsPage />} />
+        <Route path="admin/payment-settings" element={<AdminPaymentSettingsPage />} />
+        <Route path="admin/logs" element={<AdminLogsPage />} />
         <Route path="admin/orders" element={<AdminOrdersPage />} />
         <Route path="admin/orders/:orderId" element={<AdminOrderPage />} />
 
@@ -37,6 +42,7 @@ function App() {
           <Route path="products/:productSlug" element={<ProductDetailPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
+          <Route path="checkout/transfer/:orderNumber" element={<TransferPaymentPage />} />
           <Route path="checkout/success/:orderNumber" element={<OrderConfirmationPage />} />
           <Route path="track-order" element={<TrackOrderPage />} />
           <Route path="contact" element={<ContactPage />} />

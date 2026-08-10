@@ -4,6 +4,9 @@ import FeatureCard from '../components/home/FeatureCard'
 import { categories, homeFeatures } from '../data/siteContent'
 import './HomePage.css'
 
+const lagosMapUrl =
+  'https://www.google.com/maps/dir/?api=1&destination=6.4328473,3.4883968'
+
 const workflowSteps = [
   {
     title: 'Browse medicines',
@@ -83,6 +86,13 @@ function FlowIcon({ name }) {
         <svg {...iconProps}>
           <path d="M12 3.5 19 6v5.4c0 4.5-3 8.3-7 9.1-4-.8-7-4.6-7-9.1V6z" />
           <path d="m8.5 12 2.3 2.3 4.9-4.9" />
+        </svg>
+      )
+    case 'location':
+      return (
+        <svg {...iconProps}>
+          <path d="M12 21s6-4.8 6-11a6 6 0 0 0-12 0c0 6.2 6 11 6 11z" />
+          <circle cx="12" cy="10" r="2.2" />
         </svg>
       )
     default:
@@ -292,6 +302,39 @@ function HomePage() {
             </p>
           </article>
         </div>
+      </section>
+
+      <section className="section location-section">
+        <SectionHeading
+          eyebrow="Our location"
+          title="Find us in Lagos"
+          description="Tap the card to open directions to our location on Google Maps."
+          align="center"
+        />
+
+        <a className="location-card" href={lagosMapUrl} target="_blank" rel="noreferrer">
+          <div className="location-card__map" aria-hidden="true">
+            <div className="location-card__grid" />
+            <div className="location-card__road location-card__road--one" />
+            <div className="location-card__road location-card__road--two" />
+            <div className="location-card__road location-card__road--three" />
+            <div className="location-card__marker">
+              <span className="location-card__marker-ring" />
+              <span className="location-card__marker-pin">
+                <FlowIcon name="location" />
+              </span>
+            </div>
+          </div>
+
+          <div className="location-card__content">
+            <p className="location-card__eyebrow">Want to locate us?</p>
+            <h3>Visit Mediscripts Pharmacy</h3>
+            <p>
+              We are at <strong>Meadow Hall Way, Lekki Peninsula II, Lagos</strong>.
+            </p>
+            <span className="location-card__cta">Get Directions</span>
+          </div>
+        </a>
       </section>
 
       <section className="section">

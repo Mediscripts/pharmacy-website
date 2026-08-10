@@ -117,14 +117,25 @@ export const purchaseSteps = [
 export const supportContacts = [
   {
     label: 'Phone',
-    value: '+234 800 000 0000',
+    value: '+234 805 772 6204',
   },
   {
     label: 'Email',
-    value: 'support@mediscriptpharmacy.com',
+    value: 'support@mediscriptspharmacy.com',
+  },
+  {
+    label: 'Instagram',
+    value: '@mediscripts_pharmacy',
   },
   {
     label: 'Hours',
     value: 'Mon - Sat, 8:00 AM - 8:00 PM',
+  },
+]
+
+export const socialLinks = [
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/mediscripts_pharmacy/',
   },
 ]

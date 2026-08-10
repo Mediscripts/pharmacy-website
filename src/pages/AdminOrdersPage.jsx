@@ -141,16 +141,17 @@ function AdminOrdersPage() {
         return true
       }
 
-      return [
-        order.order_number,
-        order.customer_name,
-        order.customer_email,
-        order.customer_phone,
-        order.status,
-        order.payment_status,
-      ]
-        .filter(Boolean)
-        .some((value) => String(value).toLowerCase().includes(query))
+        return [
+          order.order_number,
+          order.customer_name,
+          order.customer_email,
+          order.customer_phone,
+          order.status,
+          order.payment_status,
+          order.payment_method,
+        ]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(query))
     })
   }, [activeFilter, orders, search])
 
@@ -285,7 +286,7 @@ function AdminOrdersPage() {
                     </div>
                     <div>
                       <strong>{order.payment_status}</strong>
-                      <p>{order.customer_phone}</p>
+                      <p>{order.payment_method === 'transfer' ? 'Manual transfer' : 'Paystack'}</p>
                     </div>
                     <div>
                       <strong>{formatCurrency(order.total_amount)}</strong>

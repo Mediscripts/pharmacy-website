@@ -206,6 +206,34 @@
   text-decoration: none;
 }
 
+.order-payment__link {
+  color: #2f9e3b;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.order-payment__receipt {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.95rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.order-payment__viewer {
+  width: 100%;
+  min-height: 240px;
+  border: 1px solid #dbe4ea;
+  border-radius: 16px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.order-payment__viewer--pdf {
+  min-height: 360px;
+}
+
 .order-prescription span {
   display: block;
   color: #475569;

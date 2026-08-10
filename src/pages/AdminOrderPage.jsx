@@ -21,6 +21,8 @@ const orderStatuses = [
   'Refunded',
 ]
 
+const paymentStatuses = ['Unpaid', 'Pending Verification', 'Paid', 'Failed', 'Refunded']
+
 function formatCurrency(value) {
   return `NGN ${Number(value || 0).toLocaleString()}`
 }
@@ -60,6 +62,10 @@ function getStatusTone(status) {
   }
 }
 
+function isPdfReceipt(payment) {
+  return String(payment?.receipt_storage_path || '').toLowerCase().endsWith('.pdf')
+}
+
 function AdminOrderPage() {
   const { orderId } = useParams()
   const { isAdmin, loading, accessToken } = useAuth()
@@ -69,6 +75,7 @@ function AdminOrderPage() {
   const [prescriptions, setPrescriptions] = useState([])
   const [history, setHistory] = useState([])
   const [statusDraft, setStatusDraft] = useState('Pending Payment')
+  const [paymentStatusDraft, setPaymentStatusDraft] = useState('Unpaid')
   const [prescriptionDraft, setPrescriptionDraft] = useState('Pending')
   const [prescriptionNoteDraft, setPrescriptionNoteDraft] = useState('')
   const [pageLoading, setPageLoading] = useState(true)
@@ -110,6 +117,7 @@ function AdminOrderPage() {
         setPrescriptions(payload.prescriptions || [])
         setHistory(payload.history || [])
         setStatusDraft(payload.order?.status || 'Pending Payment')
+        setPaymentStatusDraft(payload.order?.payment_status || 'Unpaid')
 
         const prescriptionList = payload.prescriptions || []
         const latestPrescription = prescriptionList[prescriptionList.length - 1]
@@ -175,6 +183,7 @@ function AdminOrderPage() {
 
       setOrder(payload.order)
       setStatusDraft(payload.order.status)
+      setPaymentStatusDraft(payload.order.payment_status)
       setMessage('Order status updated.')
     } catch (error) {
       setMessage(error.message)
@@ -224,6 +233,46 @@ function AdminOrderPage() {
       setMessage(error.message)
     } finally {
       setSavingPrescription(false)
+    }
+  }
+
+  const handlePaymentSave = async (event) => {
+    event.preventDefault()
+
+    if (!order) {
+      return
+    }
+
+    setSaving(true)
+    setMessage('')
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/admin/orders/${order.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          paymentStatus: paymentStatusDraft,
+        }),
+      })
+
+      const payload = await response.json()
+
+      if (!response.ok) {
+        throw new Error(payload.message || 'Unable to update the payment status.')
+      }
+
+      setOrder(payload.order)
+      setPaymentStatusDraft(payload.order.payment_status)
+      setStatusDraft(payload.order.status)
+      setPayment(payload.payment || payment)
+      setMessage('Payment status updated.')
+    } catch (error) {
+      setMessage(error.message)
+    } finally {
+      setSaving(false)
     }
   }
 
@@ -394,6 +443,10 @@ function AdminOrderPage() {
                   <strong>{payment.status}</strong>
                 </div>
                 <div>
+                  <span>Method</span>
+                  <strong>{payment.payment_method || order.payment_method || 'Paystack'}</strong>
+                </div>
+                <div>
                   <span>Reference</span>
                   <strong>{payment.reference}</strong>
                 </div>
@@ -402,9 +455,34 @@ function AdminOrderPage() {
                   <strong>{formatCurrency(payment.amount)}</strong>
                 </div>
                 <div>
+                  <span>Receipt</span>
+                  <strong>{payment.receipt_status || 'Not submitted'}</strong>
+                </div>
+                <div>
                   <span>Updated</span>
                   <strong>{formatDate(payment.updated_at)}</strong>
                 </div>
+                {payment.receipt_url ? (
+                  <div className="order-info-grid__wide order-payment__receipt">
+                    <span>Receipt file</span>
+                    {isPdfReceipt(payment) ? (
+                      <iframe
+                        className="order-payment__viewer order-payment__viewer--pdf"
+                        src={payment.receipt_url}
+                        title={`Receipt for ${order.order_number}`}
+                      />
+                    ) : (
+                      <img
+                        className="order-payment__viewer"
+                        src={payment.receipt_url}
+                        alt={`Receipt for ${order.order_number}`}
+                      />
+                    )}
+                    <a className="order-payment__link" href={payment.receipt_url} target="_blank" rel="noreferrer">
+                      Open receipt in a new tab
+                    </a>
+                  </div>
+                ) : null}
               </div>
             ) : (
               <div className="admin-empty admin-empty--compact">
@@ -552,6 +630,37 @@ function AdminOrderPage() {
 
               <button type="submit" className="admin-button" disabled={saving}>
                 {saving ? 'Saving...' : 'Save status'}
+              </button>
+            </form>
+          </article>
+
+          <article className="order-panel">
+            <div className="order-panel__head">
+              <h2>Confirm payment</h2>
+              <span>{paymentStatuses.length} options</span>
+            </div>
+
+            <form className="order-editor" onSubmit={handlePaymentSave}>
+              <label>
+                <span>Payment status</span>
+                <select
+                  value={paymentStatusDraft}
+                  onChange={(event) => setPaymentStatusDraft(event.target.value)}
+                >
+                  {paymentStatuses.map((status) => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <p className="order-help">
+                Mark manual transfers as paid only after the receipt has been checked.
+              </p>
+
+              <button type="submit" className="admin-button" disabled={saving}>
+                {saving ? 'Saving...' : paymentStatusDraft === 'Paid' ? 'Confirm payment' : 'Save payment status'}
               </button>
             </form>
           </article>

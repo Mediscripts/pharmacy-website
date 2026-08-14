@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './TrackOrderPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -120,10 +121,10 @@ function TrackOrderPage() {
 
       setSession(payload)
       setMessage(payload.message || '')
-      setError(response.ok ? '' : payload.message || '')
+      setError(response.ok ? '' : getFriendlyErrorMessage(payload, 'We could not check that order right now.'))
       setOtp('')
     } catch (err) {
-      setError(err.message)
+      setError(getFriendlyErrorMessage(err, 'We could not check that order right now.'))
       setMessage('')
       setSession(null)
     } finally {
@@ -164,7 +165,7 @@ function TrackOrderPage() {
       setError('')
       setOtp('')
     } catch (err) {
-      setError(err.message)
+      setError(getFriendlyErrorMessage(err, 'We could not send the tracking code right now.'))
     } finally {
       setSendingCode(false)
     }
@@ -199,7 +200,7 @@ function TrackOrderPage() {
       setMessage(payload.message || 'Tracking confirmed.')
       setError('')
     } catch (err) {
-      setError(err.message)
+      setError(getFriendlyErrorMessage(err, 'We could not verify that code right now.'))
     } finally {
       setVerifyingCode(false)
     }

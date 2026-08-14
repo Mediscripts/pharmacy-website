@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import { AuthContext } from './authContext'
 
 function AuthProvider({ children }) {
@@ -66,7 +67,10 @@ function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
     if (error) {
-      return { success: false, message: error.message }
+      return {
+        success: false,
+        message: getFriendlyErrorMessage(error, 'We could not sign you in. Please try again.'),
+      }
     }
 
     const { data: profile, error: profileError } = await supabase

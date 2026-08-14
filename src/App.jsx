@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SiteLayout from './components/layout/SiteLayout'
+import ScrollToTop from './components/layout/ScrollToTop'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminCatalogPage from './pages/AdminCatalogPage'
 import AdminProductPage from './pages/AdminProductPage'
@@ -7,6 +8,7 @@ import AdminInventoryPage from './pages/AdminInventoryPage'
 import AdminPaymentsPage from './pages/AdminPaymentsPage'
 import AdminPaymentSettingsPage from './pages/AdminPaymentSettingsPage'
 import AdminLogsPage from './pages/AdminLogsPage'
+import AdminStorefrontPage from './pages/AdminStorefrontPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 import AdminOrderPage from './pages/AdminOrderPage'
 import AdminLoginPage from './pages/AdminLoginPage'
@@ -24,6 +26,7 @@ import NotFoundPage from './pages/NotFoundPage'
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="admin/login" element={<AdminLoginPage />} />
         <Route path="admin" element={<AdminDashboardPage />} />
@@ -33,6 +36,7 @@ function App() {
         <Route path="admin/payments" element={<AdminPaymentsPage />} />
         <Route path="admin/payment-settings" element={<AdminPaymentSettingsPage />} />
         <Route path="admin/logs" element={<AdminLogsPage />} />
+        <Route path="admin/storefront" element={<AdminStorefrontPage />} />
         <Route path="admin/orders" element={<AdminOrdersPage />} />
         <Route path="admin/orders/:orderId" element={<AdminOrderPage />} />
 

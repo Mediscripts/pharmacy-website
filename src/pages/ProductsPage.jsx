@@ -1,8 +1,9 @@
-import { useDeferredValue, useMemo, useState } from 'react'
+import { useDeferredValue, useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
+import { categories as fallbackCategoryNames } from '../data/siteContent'
 import SectionHeading from '../components/ui/SectionHeading'
 import ProductCard from '../components/home/ProductCard'
-import { categories as fallbackCategoryNames } from '../data/siteContent'
 import './ProductsPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -61,14 +62,38 @@ function ProductSkeletonCard() {
 }
 
 function ProductsPage() {
-  const [query, setQuery] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchFromUrl = searchParams.get('q') || ''
+  const [query, setQuery] = useState(searchFromUrl)
   const [selectedCategory, setSelectedCategory] = useState('all')
   const deferredQuery = useDeferredValue(query.trim())
+
+  useEffect(() => {
+    setQuery(searchFromUrl)
+  }, [searchFromUrl])
+
+  const handleSearchSubmit = (event) => {
+    event.preventDefault()
+    const value = query.trim()
+
+    if (value) {
+      setSearchParams({ q: value })
+      return
+    }
+
+    setSearchParams({})
+  }
 
   const categoriesQuery = useQuery({
     queryKey: ['catalog-categories'],
     queryFn: () => fetchJson(`${apiBaseUrl}/api/catalog/categories`),
     staleTime: 24 * 60 * 60 * 1000,
+  })
+
+  const sectionsQuery = useQuery({
+    queryKey: ['catalog-homepage-sections'],
+    queryFn: () => fetchJson(`${apiBaseUrl}/api/catalog/homepage-sections`),
+    staleTime: 5 * 60 * 1000,
   })
 
   const categoryOptions = useMemo(() => {
@@ -94,6 +119,10 @@ function ProductsPage() {
       })),
     ]
   }, [categoriesQuery.data])
+
+  const promotionProducts = Array.isArray(sectionsQuery.data?.promotionProducts)
+    ? sectionsQuery.data.promotionProducts
+    : []
 
   const productsQuery = useInfiniteQuery({
     queryKey: ['catalog-products', deferredQuery, selectedCategory],
@@ -145,24 +174,63 @@ function ProductsPage() {
       <section className="catalog-hero">
         <SectionHeading
           eyebrow="Catalog"
-          title="Browse medicines with confidence"
-          description="Search quickly, filter by category, and find the medicines that fit your needs without friction."
+          title="Browse products with confidence"
+          description="Search quickly, filter by category, and find the products that fit your needs without friction."
         />
       </section>
 
-      <section className="catalog-toolbar" aria-label="Product filters">
-        <label className="catalog-search">
-          <span className="catalog-search__icon" aria-hidden="true">
-            <SearchIcon />
-          </span>
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search medicines"
-            aria-label="Search medicines"
+      {!deferredQuery && promotionProducts.length > 0 ? (
+        <section className="catalog-promo">
+          <SectionHeading
+            eyebrow="Promotion"
+            title="What the team wants you to see"
+            description="These picks are chosen by the admin and only appear when there are products to show."
+            align="center"
           />
-        </label>
+
+          <div className="catalog-promo__grid">
+            {promotionProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                id={product.id}
+                slug={product.slug}
+                category={product.category}
+                name={product.name}
+                description={product.description}
+                price={Number(product.price) || 0}
+                image={
+                  Array.isArray(product.images) && product.images.length > 0
+                    ? product.images[0]
+                    : '/product-placeholder.svg'
+                }
+                images={product.images}
+                inStock={(product.stockQuantity || 0) > 0}
+                prescriptionRequired={product.prescriptionRequired}
+              />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <form className="catalog-toolbar" aria-label="Product filters" onSubmit={handleSearchSubmit}>
+        <div className="catalog-search-form">
+          <label className="catalog-search">
+            <span className="catalog-search__icon" aria-hidden="true">
+              <SearchIcon />
+            </span>
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search products"
+              aria-label="Search products"
+            />
+          </label>
+
+          <button type="submit" className="catalog-search__button">
+            Search
+          </button>
+        </div>
 
         <div className="catalog-chips" role="list" aria-label="Category filters">
           {categoryOptions.map((category) => (
@@ -176,7 +244,7 @@ function ProductsPage() {
             </button>
           ))}
         </div>
-      </section>
+      </form>
 
       <section className="catalog-results" aria-live="polite">
         {isLoadingInitial ? <p className="catalog-results__count">Loading catalog...</p> : null}
@@ -188,7 +256,7 @@ function ProductsPage() {
         ) : null}
 
         {isLoadingInitial ? (
-          <div className="catalog-grid" aria-label="Loading medicines">
+          <div className="catalog-grid" aria-label="Loading products">
             {Array.from({ length: 6 }).map((_, index) => (
               <ProductSkeletonCard key={`skeleton-${index}`} />
             ))}

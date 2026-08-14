@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './AdminInventoryPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -85,7 +86,7 @@ function AdminInventoryPage() {
         }
       } catch (error) {
         if (isMounted) {
-          setPageError(error.message)
+          setPageError(getFriendlyErrorMessage(error, 'We could not load inventory right now.'))
         }
       } finally {
         if (isMounted) {
@@ -129,7 +130,7 @@ function AdminInventoryPage() {
       setForm(emptyAdjustmentForm)
       setRefreshKey((current) => current + 1)
     } catch (error) {
-      setMessage(error.message)
+      setMessage(getFriendlyErrorMessage(error, 'We could not update inventory right now.'))
     } finally {
       setSaving(false)
     }

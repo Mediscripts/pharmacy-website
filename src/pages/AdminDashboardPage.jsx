@@ -153,6 +153,9 @@ function AdminDashboardPage() {
           <Link className="admin-button admin-button--ghost" to="/admin/payment-settings">
             Transfer details
           </Link>
+          <Link className="admin-button admin-button--ghost" to="/admin/storefront">
+            Storefront picks
+          </Link>
           <Link className="admin-button admin-button--ghost" to="/admin/logs">
             Activity log
           </Link>
@@ -193,6 +196,14 @@ function AdminDashboardPage() {
       ) : null}
 
       <section className="admin-sections">
+        <ActionCard
+          to="/admin/storefront"
+          eyebrow="Storefront"
+          title="Choose the products people see first"
+          description="Pick featured products and promotion items for the storefront. Leave a section empty and it stays hidden."
+          cta="Open storefront picks"
+          icon="catalog"
+        />
         <ActionCard
           to="/admin/catalog"
           eyebrow="Catalog"

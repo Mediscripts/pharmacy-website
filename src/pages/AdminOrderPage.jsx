@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './AdminDashboardPage.css'
 import './AdminOrderPage.css'
 
@@ -125,7 +126,7 @@ function AdminOrderPage() {
         setPrescriptionNoteDraft(latestPrescription?.review_note || payload.order?.rejection_reason || '')
       } catch (error) {
         if (isMounted) {
-          setPageError(error.message)
+          setPageError(getFriendlyErrorMessage(error, 'We could not load this order right now.'))
         }
       } finally {
         if (isMounted) {
@@ -186,7 +187,7 @@ function AdminOrderPage() {
       setPaymentStatusDraft(payload.order.payment_status)
       setMessage('Order status updated.')
     } catch (error) {
-      setMessage(error.message)
+      setMessage(getFriendlyErrorMessage(error, 'We could not update the order right now.'))
     } finally {
       setSaving(false)
     }
@@ -230,7 +231,7 @@ function AdminOrderPage() {
       setStatusDraft(payload.order.status)
       setMessage('Prescription review updated.')
     } catch (error) {
-      setMessage(error.message)
+      setMessage(getFriendlyErrorMessage(error, 'We could not update the review right now.'))
     } finally {
       setSavingPrescription(false)
     }
@@ -270,7 +271,7 @@ function AdminOrderPage() {
       setPayment(payload.payment || payment)
       setMessage('Payment status updated.')
     } catch (error) {
-      setMessage(error.message)
+      setMessage(getFriendlyErrorMessage(error, 'We could not update the payment right now.'))
     } finally {
       setSaving(false)
     }

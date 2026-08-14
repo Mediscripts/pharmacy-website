@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './AdminCatalogPage.css'
 import './AdminPaymentsPage.css'
 
@@ -55,7 +56,7 @@ function AdminPaymentsPage() {
         }
       } catch (error) {
         if (isMounted) {
-          setPageError(error.message)
+          setPageError(getFriendlyErrorMessage(error, 'We could not load payments right now.'))
         }
       } finally {
         if (isMounted) {

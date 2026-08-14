@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './AdminDashboardPage.css'
 import './AdminPaymentSettingsPage.css'
 
@@ -49,7 +50,7 @@ function AdminPaymentSettingsPage() {
         }
       } catch (err) {
         if (isMounted) {
-          setError(err.message)
+          setError(getFriendlyErrorMessage(err, 'We could not load the payment settings right now.'))
         }
       } finally {
         if (isMounted) {
@@ -90,7 +91,7 @@ function AdminPaymentSettingsPage() {
       setSettings(payload.settings || settings)
       setMessage('Transfer details updated.')
     } catch (err) {
-      setError(err.message)
+      setError(getFriendlyErrorMessage(err, 'We could not save the transfer details right now.'))
     } finally {
       setSaving(false)
     }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './AdminCatalogPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -110,7 +111,7 @@ function AdminCatalogPage() {
         }
       } catch (error) {
         if (isMounted) {
-          setPageError(error.message)
+          setPageError(getFriendlyErrorMessage(error, 'We could not load the catalog right now.'))
         }
       } finally {
         if (isMounted) {
@@ -151,7 +152,7 @@ function AdminCatalogPage() {
       setCategoryForm(emptyCategoryForm)
       setActionMessage('Category created successfully.')
     } catch (error) {
-      setActionMessage(error.message)
+      setActionMessage(getFriendlyErrorMessage(error, 'We could not save this category right now.'))
     } finally {
       setSavingCategory(false)
     }
@@ -404,7 +405,7 @@ function AdminCatalogPage() {
                             await archiveCategory(category.id)
                             setActionMessage('Category archived.')
                           } catch (error) {
-                            setActionMessage(error.message)
+                            setActionMessage(getFriendlyErrorMessage(error, 'We could not archive this category right now.'))
                           }
                         }}
                         disabled={!category.is_active}

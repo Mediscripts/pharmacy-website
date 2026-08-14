@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './TransferPaymentPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -45,7 +46,7 @@ function TransferPaymentPage() {
         }
       } catch (err) {
         if (isMounted) {
-          setError(err.message)
+          setError(getFriendlyErrorMessage(err, 'We could not load the transfer details right now.'))
         }
       } finally {
         if (isMounted) {
@@ -74,7 +75,7 @@ function TransferPaymentPage() {
       const dataUrl = await readFileAsDataUrl(file)
       setReceiptDataUrl(dataUrl)
     } catch (err) {
-      setError(err.message)
+      setError(getFriendlyErrorMessage(err, 'We could not read that receipt file right now.'))
       setReceiptFile(null)
       setReceiptDataUrl('')
     }
@@ -112,7 +113,7 @@ function TransferPaymentPage() {
       setReceiptFile(null)
       setReceiptDataUrl('')
     } catch (err) {
-      setError(err.message)
+      setError(getFriendlyErrorMessage(err, 'We could not submit your receipt right now.'))
     } finally {
       setSubmitting(false)
     }

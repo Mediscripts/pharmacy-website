@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import useAuth from '../context/useAuth'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import { uploadProductImages } from '../lib/productImageUpload'
 import './AdminProductPage.css'
 
@@ -102,7 +103,7 @@ function AdminProductPage() {
         )
       } catch (error) {
         if (isMounted) {
-          setPageError(error.message)
+          setPageError(getFriendlyErrorMessage(error, 'We could not load the product right now.'))
         }
       } finally {
         if (isMounted) {
@@ -166,7 +167,7 @@ function AdminProductPage() {
         navigate(`/admin/catalog/${savedProduct.id}`, { replace: true })
       }
     } catch (error) {
-      setMessage(error.message)
+      setMessage(getFriendlyErrorMessage(error, 'We could not save this product right now.'))
     } finally {
       setSaving(false)
     }
@@ -193,7 +194,7 @@ function AdminProductPage() {
       setProduct((current) => (current ? { ...current, is_active: false } : current))
       setMessage('Product archived.')
     } catch (error) {
-      setMessage(error.message)
+      setMessage(getFriendlyErrorMessage(error, 'We could not archive this product right now.'))
     }
   }
 

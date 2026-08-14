@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import useCart from '../context/useCart'
+import { getFriendlyErrorMessage } from '../lib/errorMessages'
 import './OrderConfirmationPage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
@@ -61,7 +62,7 @@ function OrderConfirmationPage() {
           setVerification((current) => ({
             ...current,
             loading: false,
-            error: error.message,
+            error: getFriendlyErrorMessage(error, 'We could not verify your payment right now.'),
           }))
         }
       }

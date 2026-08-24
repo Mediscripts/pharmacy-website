@@ -1,0 +1,107 @@
+.cookie-banner {
+  position: sticky;
+  bottom: 18px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(1200px, calc(100vw - 2rem));
+  margin: 0 auto 18px;
+  padding: 18px 20px;
+  border: 1px solid rgba(15, 23, 42, 0.09);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(56, 195, 77, 0.12), transparent 28%),
+    rgba(255, 255, 255, 0.96);
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.cookie-banner__copy {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cookie-banner__kicker {
+  margin: 0;
+  color: #38c34d;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.cookie-banner__copy h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.06rem;
+  line-height: 1.2;
+}
+
+.cookie-banner__copy p {
+  margin: 0;
+  max-width: 70ch;
+  color: #475569;
+  line-height: 1.6;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.cookie-banner__link,
+.cookie-banner__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cookie-banner__link {
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.cookie-banner__button {
+  border: 1px solid #38c34d;
+  color: #fff;
+  background: linear-gradient(135deg, #38c34d, #2ea53f);
+}
+
+.cookie-banner__button--ghost {
+  border-color: rgba(15, 23, 42, 0.1);
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+@media (max-width: 760px) {
+  .cookie-banner {
+    position: static;
+    width: min(100vw - 1rem, 1200px);
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 12px;
+  }
+
+  .cookie-banner__actions {
+    width: 100%;
+  }
+
+  .cookie-banner__link,
+  .cookie-banner__button {
+    flex: 1 1 100%;
+  }
+}

@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import CookieConsentBanner from './CookieConsentBanner'
 import SiteHeader from './SiteHeader'
 import SiteFooter from './SiteFooter'
 
@@ -9,6 +10,7 @@ function SiteLayout() {
       <main className="site-main">
         <Outlet />
       </main>
+      <CookieConsentBanner />
       <SiteFooter />
     </div>
   )

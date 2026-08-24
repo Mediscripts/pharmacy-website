@@ -21,6 +21,9 @@ import CartPage from './pages/CartPage'
 import OrderConfirmationPage from './pages/OrderConfirmationPage'
 import TrackOrderPage from './pages/TrackOrderPage'
 import ContactPage from './pages/ContactPage'
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
+import TermsOfServicePage from './pages/TermsOfServicePage'
+import CookiesNoticePage from './pages/CookiesNoticePage'
 import NotFoundPage from './pages/NotFoundPage'
 
 function App() {
@@ -50,6 +53,9 @@ function App() {
           <Route path="checkout/success/:orderNumber" element={<OrderConfirmationPage />} />
           <Route path="track-order" element={<TrackOrderPage />} />
           <Route path="contact" element={<ContactPage />} />
+          <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="terms" element={<TermsOfServicePage />} />
+          <Route path="cookies" element={<CookiesNoticePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

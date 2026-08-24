@@ -194,6 +194,12 @@ function CheckoutPage() {
             <Link className="checkout-link" to="/cart">
               Back to cart
             </Link>
+            <p className="checkout-consent">
+              By continuing, you agree to our{' '}
+              <Link to="/terms">Terms of Service</Link>,{' '}
+              <Link to="/privacy-policy">Privacy Policy</Link>, and{' '}
+              <Link to="/cookies">Cookies Notice</Link>.
+            </p>
           </div>
         </form>
 

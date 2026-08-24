@@ -31,6 +31,12 @@ function SiteFooter() {
             <Link to="/contact">Contact</Link>
           </div>
 
+          <div className="site-footer__links site-footer__links--policies" aria-label="Policy links">
+            <Link to="/privacy-policy">Privacy &amp; Data Policy</Link>
+            <Link to="/terms">Terms of Service</Link>
+            <Link to="/cookies">Cookies Notice</Link>
+          </div>
+
           <div className="site-footer__socials" aria-label="Social links">
             {socialLinks.map((item) => (
               <a key={item.label} href={item.href} target="_blank" rel="noreferrer">

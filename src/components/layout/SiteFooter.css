@@ -68,6 +68,10 @@
   flex-wrap: wrap;
 }
 
+.site-footer__links--policies {
+  padding-top: 2px;
+}
+
 .site-footer__links a {
   color: #334155;
   font-weight: 600;
@@ -112,6 +116,10 @@
 
   .site-footer__contacts {
     grid-template-columns: 1fr;
+  }
+
+  .site-footer__links {
+    row-gap: 10px;
   }
 }
 

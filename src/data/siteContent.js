@@ -129,7 +129,11 @@ export const supportContacts = [
   },
   {
     label: 'Hours',
-    value: 'Mon - Sat, 8:00 AM - 8:00 PM',
+    value: 'Mon - Sat, 8:00 AM - 9:00 PM',
+  },
+  {
+    label: 'Sunday',
+    value: '12:00 PM - 8:00 PM',
   },
 ]
 

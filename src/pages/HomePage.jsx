@@ -459,7 +459,7 @@ function HomePage() {
           <SectionHeading
             eyebrow="Promotion"
             title="Extra picks worth a look"
-            description="These are the items the team wants customers to see right now."
+            description="Explore a few more products selected by our team."
             align="center"
           />
 

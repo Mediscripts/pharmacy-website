@@ -233,8 +233,8 @@ function ProductsPage() {
         <section className="catalog-promo">
           <SectionHeading
             eyebrow="Promotion"
-            title="What the team wants you to see"
-            description="These picks are chosen by the admin and only appear when there are products to show."
+            title="Pharmacy picks"
+            description="Explore products selected by our team."
             align="center"
           />
 

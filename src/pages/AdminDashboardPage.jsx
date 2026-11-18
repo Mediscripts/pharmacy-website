@@ -197,6 +197,14 @@ function AdminDashboardPage() {
 
       <section className="admin-sections">
         <ActionCard
+          to="/admin/health-hub"
+          eyebrow="Health education"
+          title="Publish helpful health articles"
+          description="Draft articles, prepare them for clinical review, and publish approved guidance in the Health Hub."
+          cta="Open Health Hub"
+          icon="catalog"
+        />
+        <ActionCard
           to="/admin/storefront"
           eyebrow="Storefront"
           title="Choose the products people see first"

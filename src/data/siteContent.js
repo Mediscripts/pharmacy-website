@@ -32,6 +32,10 @@ export const categories = [
   'Skin Care',
 ]
 
+export const pharmacyAddress = 'Meadow Hall Way, Lekki Peninsula II, Lagos'
+export const pharmacyDirectionsUrl =
+  'https://www.google.com/maps/dir/?api=1&destination=6.4328473,3.4883968'
+
 export const featuredProducts = [
   {
     id: 'paracetamol-500mg',

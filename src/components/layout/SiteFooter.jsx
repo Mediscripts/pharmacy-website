@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { socialLinks, supportContacts } from '../../data/siteContent'
+import { pharmacyAddress, pharmacyDirectionsUrl, socialLinks, supportContacts } from '../../data/siteContent'
 import './SiteFooter.css'
 
 function SiteFooter() {
@@ -23,6 +23,16 @@ function SiteFooter() {
               </div>
             ))}
           </div>
+          <a
+            className="site-footer__address"
+            href={pharmacyDirectionsUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Get directions to Mediscripts Pharmacy at ${pharmacyAddress}`}
+          >
+            <span>Visit us</span>
+            <strong>{pharmacyAddress}</strong>
+          </a>
         </div>
 
         <div className="site-footer__stack">

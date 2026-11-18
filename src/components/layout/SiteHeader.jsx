@@ -5,6 +5,7 @@ import './SiteHeader.css'
 
 const navItems = [
   { label: 'Home', to: '/' },
+  { label: 'Health Hub', to: '/health-hub' },
   { label: 'Products', to: '/products' },
   { label: 'Track Order', to: '/track-order' },
   { label: 'Contact', to: '/contact' },

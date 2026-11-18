@@ -1039,6 +1039,78 @@
   gap: 14px;
 }
 
+.home-health-section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.home-health-section__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.home-health-section__eyebrow {
+  margin: 0 0 0.45rem;
+  color: #28773a;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  font-weight: 850;
+}
+
+.home-health-section__heading h2 {
+  max-width: 20ch;
+  margin: 0;
+  color: #142a1b;
+  font-size: clamp(1.7rem, 3.5vw, 2.7rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.home-health-section__heading p:not(.home-health-section__eyebrow) {
+  margin: 0.7rem 0 0;
+  color: #64736a;
+}
+
+.home-health-section__heading > a {
+  flex: 0 0 auto;
+  color: #17632c;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.home-health-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.home-health-card {
+  overflow: hidden;
+  border: 1px solid #dfe8e1;
+  border-radius: 20px;
+  background: #fff;
+}
+
+.home-health-card__image,
+.home-health-card__image img {
+  display: block;
+  width: 100%;
+  height: 165px;
+  object-fit: cover;
+}
+.home-health-card__image { position: relative; height: 165px; margin: 0; }
+
+.home-health-card > div { padding: 1rem 1.1rem 1.1rem; }
+.home-health-card > div > span { color: #28773a; font-size: 0.72rem; font-weight: 850; text-transform: uppercase; letter-spacing: 0.1em; }
+.home-health-card h3 { margin: 0.45rem 0; color: #18291d; font-size: 1.12rem; line-height: 1.35; }
+.home-health-card h3 a { text-decoration: none; }
+.home-health-card p { min-height: 3em; margin: 0 0 0.7rem; color: #64736a; line-height: 1.55; }
+.home-health-card__read { color: #17632c; font-weight: 800; text-decoration: none; }
+
 @media (max-width: 1100px) {
   .hero,
   .workflow {
@@ -1129,6 +1201,9 @@
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .home-health-section__heading { align-items: flex-start; flex-direction: column; }
+  .home-health-grid { grid-template-columns: 1fr; }
 
   .home-cta__actions,
   .hero__actions {

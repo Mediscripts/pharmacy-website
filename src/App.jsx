@@ -9,6 +9,7 @@ import AdminPaymentsPage from './pages/AdminPaymentsPage'
 import AdminPaymentSettingsPage from './pages/AdminPaymentSettingsPage'
 import AdminLogsPage from './pages/AdminLogsPage'
 import AdminStorefrontPage from './pages/AdminStorefrontPage'
+import AdminHealthHubPage from './pages/AdminHealthHubPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 import AdminOrderPage from './pages/AdminOrderPage'
 import AdminLoginPage from './pages/AdminLoginPage'
@@ -25,6 +26,8 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import TermsOfServicePage from './pages/TermsOfServicePage'
 import CookiesNoticePage from './pages/CookiesNoticePage'
 import NotFoundPage from './pages/NotFoundPage'
+import HealthHubPage from './pages/HealthHubPage'
+import HealthArticlePage from './pages/HealthArticlePage'
 
 function App() {
   return (
@@ -40,6 +43,8 @@ function App() {
         <Route path="admin/payment-settings" element={<AdminPaymentSettingsPage />} />
         <Route path="admin/logs" element={<AdminLogsPage />} />
         <Route path="admin/storefront" element={<AdminStorefrontPage />} />
+        <Route path="admin/health-hub" element={<AdminHealthHubPage />} />
+        <Route path="admin/health-hub/:articleId" element={<AdminHealthHubPage />} />
         <Route path="admin/orders" element={<AdminOrdersPage />} />
         <Route path="admin/orders/:orderId" element={<AdminOrderPage />} />
 
@@ -47,6 +52,9 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="products/:productSlug" element={<ProductDetailPage />} />
+          <Route path="health-hub" element={<HealthHubPage />} />
+          <Route path="health-hub/category/:categorySlug" element={<HealthHubPage />} />
+          <Route path="health-hub/:articleSlug" element={<HealthArticlePage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="checkout/transfer/:orderNumber" element={<TransferPaymentPage />} />

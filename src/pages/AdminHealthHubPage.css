@@ -1,0 +1,75 @@
+.health-admin { gap: 1.3rem; }
+.health-admin__top,
+.health-admin__editor-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.health-admin__top { padding: 1.7rem; border: 1px solid #dce8df; border-radius: 26px; background: linear-gradient(130deg, #f4fbf4, #fffaf0); }
+.health-admin__top-actions,
+.health-admin__editor-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.65rem; }
+.health-admin__top h1 { margin: 0.35rem 0; color: #10251a; font-size: clamp(1.8rem, 3vw, 2.65rem); }
+.health-admin__top p:not(.admin-kicker) { margin: 0; color: #64736a; }
+.health-admin__editor-top > a { color: #167a34; font-weight: 700; text-decoration: none; }
+.health-admin__status { border-radius: 999px; padding: 0.4rem 0.75rem; color: #475569; background: #e8edf1; font-size: 0.82rem; font-weight: 800; text-transform: capitalize; }
+.health-admin__status--published { color: #166534; background: #dcfce7; }
+.health-admin__status--in_review { color: #92400e; background: #fef3c7; }
+.health-admin__list { display: grid; gap: 0.7rem; }
+.health-admin__row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; border: 1px solid #e0e7e2; border-radius: 18px; background: #fff; text-decoration: none; transition: transform 160ms ease, box-shadow 160ms ease; }
+.health-admin__row:hover { transform: translateY(-1px); box-shadow: 0 12px 28px #10251a12; }
+.health-admin__row span { color: #688071; font-size: 0.8rem; font-weight: 700; text-transform: capitalize; }
+.health-admin__row h2 { margin: 0.35rem 0; color: #10251a; font-size: 1.15rem; }
+.health-admin__row p { margin: 0; color: #64736a; }
+.health-admin__date { flex: 0 0 auto; }
+.health-admin__empty { padding: 3rem; text-align: center; border: 1px dashed #bfd0c3; border-radius: 22px; background: #fff; }
+.health-admin__empty h2 { margin: 0 0 0.4rem; }
+.health-admin__form { display: grid; gap: 1.15rem; padding: clamp(1rem, 3vw, 2rem); border: 1px solid #e1e8e3; border-radius: 24px; background: #fff; box-shadow: 0 14px 36px #122a1c08; }
+.health-admin__form > label,
+.health-admin__form-grid > label { display: grid; gap: 0.45rem; color: #23352a; font-weight: 700; }
+.health-admin__form label small { color: #64736a; font-size: 0.82rem; font-weight: 400; line-height: 1.55; }
+.health-admin__form input:not([type="file"]):not([type="checkbox"]),
+.health-admin__form textarea,
+.health-admin__form select { width: 100%; min-height: 46px; padding: 0.75rem 0.85rem; border: 1px solid #d3ded6; border-radius: 12px; background: #fff; color: #17251c; font: inherit; font-weight: 400; }
+.health-admin__form textarea { resize: vertical; line-height: 1.65; }
+.health-admin__form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.health-admin__category-picker { display: grid; align-content: start; gap: 0.45rem; }
+.health-admin__category-picker > label,
+.health-admin__new-category > label { display: grid; gap: 0.45rem; color: #23352a; font-weight: 700; }
+.health-admin__category-picker select,
+.health-admin__new-category input { width: 100%; min-height: 46px; padding: 0.7rem 0.8rem; border: 1px solid #d3ded6; border-radius: 12px; background: white; color: #17251c; font: inherit; font-weight: 400; }
+.health-admin__add-category { justify-self: start; padding: 0.35rem 0; border: 0; background: transparent; color: #17632c; font: inherit; font-weight: 800; cursor: pointer; }
+.health-admin__new-category { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) auto; align-items: end; gap: 0.8rem; padding: 1rem; border: 1px solid #dce8df; border-radius: 16px; background: #f6faf6; }
+.health-admin__new-category label span { color: #23352a; }
+.health-admin__new-category label small { color: #64736a; font-weight: 400; }
+.health-admin__image-field { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem; padding: 1rem; border: 1px dashed #cbd9ce; border-radius: 16px; }
+.health-admin__image-field > div { display: grid; gap: 0.2rem; flex: 1 1 220px; }
+.health-admin__image-field > div span { color: #64736a; font-size: 0.86rem; }
+.health-admin__image-field input[type="file"], .health-admin__hidden-file { display: none; }
+.health-admin__image-field img { width: 100%; max-height: 240px; object-fit: cover; border-radius: 12px; }
+.health-admin__cover-preview { flex-basis: 100%; width: 100%; height: 220px; border-radius: 12px; }
+.health-admin__ownership { display: flex; align-items: flex-start; gap: 0.55rem; flex-basis: 100%; color: #31463a; font-size: 0.9rem; font-weight: 700; }
+.health-admin__ownership input { margin-top: 0.2rem; }
+.health-admin__attribution-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.65rem; flex-basis: 100%; padding: 0.8rem; border: 1px solid #e1e8e3; border-radius: 12px; background: #fff; }
+.health-admin__attribution-fields label,
+.health-admin__inline-attribution > label:not(.health-admin__ownership) { display: grid; gap: 0.35rem; color: #31463a; font-size: 0.86rem; font-weight: 700; }
+.health-admin__attribution-fields small { grid-column: 1 / -1; color: #64736a; font-size: 0.8rem; }
+.health-admin__inline-attribution { display: grid; gap: 0.75rem; padding: 1rem; border-top: 1px solid #dfe7e1; background: #f7faf7; }
+.health-admin__inline-attribution > strong { color: #1d3926; }
+.health-admin__inline-attribution > label input:not([type="checkbox"]) { width: 100%; min-height: 42px; padding: 0.65rem 0.75rem; border: 1px solid #d3ded6; border-radius: 10px; font: inherit; }
+.health-admin__body-wrap { position: relative; overflow: visible; border: 1px solid #d3ded6; border-radius: 14px; }
+.health-admin__toolbar { display: flex; flex-wrap: wrap; gap: 0.35rem; padding: 0.55rem; border-bottom: 1px solid #e0e7e2; background: #f7faf7; border-radius: 14px 14px 0 0; }
+.health-admin__toolbar button { min-height: 34px; padding: 0.35rem 0.7rem; border: 1px solid #d4e0d6; border-radius: 8px; background: white; color: #24402d; font: inherit; font-size: 0.82rem; font-weight: 700; cursor: pointer; }
+.health-admin__body-wrap textarea { display: block; width: 100%; border: 0; border-radius: 0 0 14px 14px; }
+.health-admin__context-action { position: fixed; z-index: 50; transform: translate(0, 4px); padding: 0.65rem 0.8rem; border: 1px solid #d4e0d6; border-radius: 10px; background: #fff; box-shadow: 0 8px 22px #10251a24; color: #173b22; font: inherit; font-weight: 700; cursor: pointer; }
+.health-admin__review-panel { display: grid; grid-template-columns: 1fr minmax(220px, 0.75fr); gap: 0.9rem 1.3rem; padding: 1.2rem; border: 1px solid #f0d8a9; border-radius: 18px; background: #fffbf1; }
+.health-admin__review-panel h2 { margin: 0.35rem 0; color: #443014; font-size: 1.2rem; }
+.health-admin__review-panel p:not(.admin-kicker) { margin: 0; color: #715b34; line-height: 1.55; }
+.health-admin__review-panel > label:not(.health-admin__confirm) { display: grid; gap: 0.4rem; align-content: center; color: #443014; font-weight: 700; }
+.health-admin__review-panel input:not([type="checkbox"]) { min-height: 44px; padding: 0.7rem; border: 1px solid #e7d5ae; border-radius: 10px; font: inherit; }
+.health-admin__confirm { display: flex; gap: 0.55rem; align-items: flex-start; grid-column: 1 / -1; color: #574725; font-size: 0.9rem; }
+.health-admin__confirm input { margin-top: 0.25rem; }
+.health-admin__actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.admin-button--publish { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0.8rem 1.1rem; border: 1px solid #174b2a; border-radius: 999px; background: #174b2a; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+.health-admin__actions button:disabled { opacity: 0.6; cursor: wait; }
+.health-admin__preview { max-width: 850px; margin: 0 auto; padding: clamp(1rem, 4vw, 3rem); border-radius: 24px; background: white; }
+.health-admin__preview-cover { width: 100%; height: min(420px, 54vw); min-height: 240px; border-radius: 20px; }
+.health-admin__preview h1 { margin: 0.4rem 0; color: #10251a; font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.08; }
+.health-admin__preview-summary { color: #64736a; font-size: 1.15rem; }
+@media (max-width: 700px) { .health-admin__top { align-items: flex-start; flex-direction: column; } .health-admin__form-grid, .health-admin__review-panel, .health-admin__attribution-fields { grid-template-columns: 1fr; } .health-admin__confirm { grid-column: auto; } .health-admin__row { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 800px) { .health-admin__new-category { grid-template-columns: 1fr; } }

@@ -1,0 +1,27 @@
+.markdown-content {
+  color: #344253;
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.markdown-content h2,
+.markdown-content h3 {
+  margin: 1.8em 0 0.55em;
+  color: #10251a;
+  line-height: 1.25;
+}
+
+.markdown-content h2 { font-size: clamp(1.4rem, 2vw, 1.9rem); }
+.markdown-content h3 { font-size: 1.25rem; }
+.markdown-content p { margin: 0 0 1.15em; }
+.markdown-content ul { margin: 0 0 1.2em; padding-left: 1.4em; }
+.markdown-content a { color: #167a34; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.markdown-content figure { margin: 1.8rem 0; }
+.markdown-content figure img,
+.markdown-content p > img { width: 100%; max-height: 560px; object-fit: cover; border-radius: 20px; }
+.credited-image { position: relative; overflow: hidden; margin: 0; }
+.credited-image > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.credited-image > figcaption { position: absolute; right: 0.65rem; bottom: 0.65rem; max-width: calc(100% - 1.3rem); padding: 0.38rem 0.65rem; border: 1px solid #ffffff40; border-radius: 9px; background: #101a16d9; color: #fff; font-size: 0.72rem; line-height: 1.35; }
+.credited-image > figcaption a { color: #d5ffd9; font-weight: 800; text-underline-offset: 2px; }
+.markdown-content__figure > img { max-height: 560px; border-radius: 20px; }
+.markdown-content__figure > figcaption { bottom: 0.8rem; right: 0.8rem; }

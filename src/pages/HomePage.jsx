@@ -4,12 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import SectionHeading from '../components/ui/SectionHeading'
 import FeatureCard from '../components/home/FeatureCard'
 import ProductCard from '../components/home/ProductCard'
-import { categories, homeFeatures } from '../data/siteContent'
+import CreditedImage from '../components/health/CreditedImage'
+import { categories, homeFeatures, pharmacyAddress, pharmacyDirectionsUrl } from '../data/siteContent'
 import './HomePage.css'
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000'
-const lagosMapUrl =
-  'https://www.google.com/maps/dir/?api=1&destination=6.4328473,3.4883968'
 const searchResultsLimit = 8
 
 function fetchJson(url) {
@@ -165,6 +164,12 @@ function HomePage() {
     staleTime: 5 * 60 * 1000,
   })
 
+  const healthArticlesQuery = useQuery({
+    queryKey: ['home-health-articles'],
+    queryFn: () => fetchJson(`${apiBaseUrl}/api/health-hub/articles?limit=3`),
+    staleTime: 5 * 60 * 1000,
+  })
+
   const searchResultsQuery = useQuery({
     queryKey: ['home-search-results', deferredSearchTerm],
     queryFn: () =>
@@ -179,6 +184,9 @@ function HomePage() {
 
   const featuredProducts = Array.isArray(sectionsQuery.data?.featuredProducts)
     ? sectionsQuery.data.featuredProducts
+    : []
+  const healthArticles = Array.isArray(healthArticlesQuery.data?.articles)
+    ? healthArticlesQuery.data.articles
     : []
 
   const searchResults = Array.isArray(searchResultsQuery.data?.products)
@@ -198,34 +206,34 @@ function HomePage() {
     <div className="page home-page">
       <section className="hero">
         <div className="hero__copy">
-          <p className="hero__kicker">Shop products first, everything else follows</p>
-          <h1>Mediscripts Pharmacy</h1>
+          <p className="hero__kicker">Good health starts with good information</p>
+          <h1>Learn about your health. Find the care you need.</h1>
           <p className="hero__text">
-            Browse the products people come for, check what is in stock, upload a prescription
-            when needed, and move straight into checkout without extra friction.
+            Explore clear health education from Mediscripts, then browse pharmacy products and
+            services whenever you need them.
           </p>
 
           <div className="hero__actions">
-            <Link className="button button--primary" to="/products">
-              Shop products
+            <Link className="button button--primary" to="/health-hub">
+              Explore the Health Hub
             </Link>
-            <Link className="button button--secondary" to="/track-order">
-              Track an order
+            <Link className="button button--secondary" to="/products">
+              Shop products
             </Link>
           </div>
 
           <div className="hero__stats" aria-label="Quick facts">
             <div>
-              <strong>Fast browsing</strong>
-              <span>Find what you need quickly without scrolling through noise</span>
+                <strong>Health education</strong>
+                <span>Find clear answers to common health questions</span>
             </div>
             <div>
-              <strong>Prescription support</strong>
-              <span>Prescription-only products stay clearly marked and easy to spot</span>
+                <strong>Medication safety</strong>
+                <span>Learn about medicines and when to ask a pharmacist</span>
             </div>
             <div>
-              <strong>Private tracking</strong>
-              <span>Follow every order with secure, customer-friendly updates</span>
+                <strong>Pharmacy support</strong>
+                <span>Shop pharmacy products when you need them</span>
             </div>
           </div>
         </div>
@@ -601,7 +609,7 @@ function HomePage() {
           align="center"
         />
 
-        <a className="location-card" href={lagosMapUrl} target="_blank" rel="noreferrer">
+        <a className="location-card" href={pharmacyDirectionsUrl} target="_blank" rel="noreferrer">
           <div className="location-card__map" aria-hidden="true">
             <div className="location-card__grid" />
             <div className="location-card__road location-card__road--one" />
@@ -619,7 +627,7 @@ function HomePage() {
             <p className="location-card__eyebrow">Want to locate us?</p>
             <h3>Visit Mediscripts Pharmacy</h3>
             <p>
-              We are at <strong>Meadow Hall Way, Lekki Peninsula II, Lagos</strong>.
+              We are at <strong>{pharmacyAddress}</strong>.
             </p>
             <span className="location-card__cta">Get Directions</span>
           </div>
@@ -641,6 +649,23 @@ function HomePage() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="section home-health-section">
+        <div className="home-health-section__heading">
+          <div>
+            <p className="home-health-section__eyebrow">Mediscripts Health Hub</p>
+            <h2>Useful health knowledge, whenever you need it.</h2>
+            <p>Explore practical education reviewed by qualified healthcare professionals.</p>
+          </div>
+          <Link to="/health-hub">Visit the Health Hub <span aria-hidden="true">→</span></Link>
+        </div>
+        {healthArticles.length ? <div className="home-health-grid">
+          {healthArticles.map((article) => <article className="home-health-card" key={article.id}>
+            {article.cover_image_url ? <CreditedImage className="home-health-card__image" src={article.cover_image_url} alt="" credit={article.cover_image_credit} sourceUrl={article.cover_image_source_url} /> : null}
+            <div><span>{article.category}</span><h3><Link to={`/health-hub/${article.slug}`}>{article.title}</Link></h3><p>{article.summary}</p><Link className="home-health-card__read" to={`/health-hub/${article.slug}`}>Read article →</Link></div>
+          </article>)}
+        </div> : null}
       </section>
 
       <section className="section home-cta">

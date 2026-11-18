@@ -10,6 +10,7 @@ import AdminPaymentSettingsPage from './pages/AdminPaymentSettingsPage'
 import AdminLogsPage from './pages/AdminLogsPage'
 import AdminStorefrontPage from './pages/AdminStorefrontPage'
 import AdminHealthHubPage from './pages/AdminHealthHubPage'
+import AdminPharmacistBookingsPage from './pages/AdminPharmacistBookingsPage'
 import AdminOrdersPage from './pages/AdminOrdersPage'
 import AdminOrderPage from './pages/AdminOrderPage'
 import AdminLoginPage from './pages/AdminLoginPage'
@@ -28,6 +29,7 @@ import CookiesNoticePage from './pages/CookiesNoticePage'
 import NotFoundPage from './pages/NotFoundPage'
 import HealthHubPage from './pages/HealthHubPage'
 import HealthArticlePage from './pages/HealthArticlePage'
+import BookPharmacistPage from './pages/BookPharmacistPage'
 
 function App() {
   return (
@@ -45,6 +47,7 @@ function App() {
         <Route path="admin/storefront" element={<AdminStorefrontPage />} />
         <Route path="admin/health-hub" element={<AdminHealthHubPage />} />
         <Route path="admin/health-hub/:articleId" element={<AdminHealthHubPage />} />
+        <Route path="admin/pharmacist-bookings" element={<AdminPharmacistBookingsPage />} />
         <Route path="admin/orders" element={<AdminOrdersPage />} />
         <Route path="admin/orders/:orderId" element={<AdminOrderPage />} />
 
@@ -55,6 +58,7 @@ function App() {
           <Route path="health-hub" element={<HealthHubPage />} />
           <Route path="health-hub/category/:categorySlug" element={<HealthHubPage />} />
           <Route path="health-hub/:articleSlug" element={<HealthArticlePage />} />
+          <Route path="book-pharmacist" element={<BookPharmacistPage />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="checkout" element={<CheckoutPage />} />
           <Route path="checkout/transfer/:orderNumber" element={<TransferPaymentPage />} />

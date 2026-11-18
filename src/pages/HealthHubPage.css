@@ -10,6 +10,7 @@
 .health-search > div { display: flex; gap: 0.55rem; }
 .health-search input { flex: 1; min-width: 0; height: 50px; padding: 0 0.9rem; border: 1px solid #ccdacf; border-radius: 12px; background: white; font: inherit; font-weight: 400; }
 .health-search button { padding: 0 1.15rem; border: 0; border-radius: 12px; background: #1c6930; color: white; font: inherit; font-weight: 750; cursor: pointer; }
+.health-hub__pharmacist-link { display: inline-flex; gap: 0.5rem; margin-top: 0.9rem; color: #17632c; font-weight: 800; text-decoration: none; }
 .health-categories { display: flex; gap: 0.55rem; overflow-x: auto; padding: 1.2rem 0; }
 .health-categories a { flex: 0 0 auto; padding: 0.65rem 0.95rem; border: 1px solid #d7e2da; border-radius: 999px; background: #fff; color: #496052; text-decoration: none; font-size: 0.88rem; font-weight: 700; }
 .health-categories a.is-active { border-color: #1c6930; background: #1c6930; color: white; }

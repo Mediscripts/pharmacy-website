@@ -1,0 +1,26 @@
+.pharmacist-bookings-admin { gap: 1.2rem; }
+.pharmacist-bookings-admin__top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.6rem; border: 1px solid #dce8df; border-radius: 24px; background: linear-gradient(130deg, #f4fbf4, #fffaf0); }
+.pharmacist-bookings-admin__top h1 { margin: 0.35rem 0; color: #10251a; font-size: clamp(1.8rem, 3vw, 2.65rem); }
+.pharmacist-bookings-admin__top p:not(.admin-kicker) { margin: 0; color: #64736a; }
+.pharmacist-bookings-list { display: grid; gap: 1rem; }
+.pharmacist-booking-card { display: grid; gap: 1rem; padding: 1.3rem; border: 1px solid #dce6de; border-radius: 20px; background: white; box-shadow: 0 12px 30px #10251a08; }
+.pharmacist-booking-card header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.pharmacist-booking-card h2 { margin: 0.2rem 0 0; color: #18291d; font-size: 1.3rem; }
+.pharmacist-booking-card__kicker { margin: 0; color: #728177; font-size: 0.82rem; }
+.pharmacist-booking-status { padding: 0.35rem 0.75rem; border-radius: 999px; background: #fef3c7; color: #92400e; font-size: 0.78rem; font-weight: 800; text-transform: capitalize; }
+.pharmacist-booking-status--confirmed { background: #dcfce7; color: #166534; }
+.pharmacist-booking-status--rescheduled { background: #e0f2fe; color: #075985; }
+.pharmacist-booking-status--declined { background: #fee2e2; color: #991b1b; }
+.pharmacist-booking-card__details { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; color: #53645a; font-size: 0.9rem; }
+.pharmacist-booking-card__details a { color: #17632c; }
+.pharmacist-booking-card__details p { flex-basis: 100%; margin: 0; }
+.pharmacist-booking-card__time, .pharmacist-booking-card__note { display: grid; gap: 0.4rem; max-width: 560px; color: #304237; font-size: 0.88rem; font-weight: 750; }
+.pharmacist-booking-card__time small, .pharmacist-booking-card__note small { color: #758278; font-weight: 400; }
+.pharmacist-booking-card__time input, .pharmacist-booking-card__note textarea { min-height: 44px; padding: 0.65rem 0.75rem; border: 1px solid #d3ded6; border-radius: 10px; font: inherit; font-weight: 400; }
+.pharmacist-booking-card__note textarea { resize: vertical; }
+.pharmacist-booking-card__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; }
+.pharmacist-booking-card__actions button:disabled { opacity: 0.6; cursor: wait; }
+.pharmacist-booking-card__decline { min-height: 44px; padding: 0.6rem 0.8rem; border: 0; background: transparent; color: #a32929; font: inherit; font-weight: 750; cursor: pointer; }
+.pharmacist-bookings-empty { padding: 2.5rem; border: 1px dashed #cddbcf; border-radius: 20px; background: white; text-align: center; color: #64736a; }
+.pharmacist-bookings-empty h2 { margin: 0 0 0.4rem; color: #17291d; }
+@media (max-width: 650px) { .pharmacist-bookings-admin__top { align-items: flex-start; flex-direction: column; } .pharmacist-booking-card__actions { align-items: stretch; flex-direction: column; } .pharmacist-booking-card__actions button { width: 100%; } }

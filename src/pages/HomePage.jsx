@@ -207,7 +207,7 @@ function HomePage() {
       <section className="hero">
         <div className="hero__copy">
           <p className="hero__kicker">Good health starts with good information</p>
-          <h1>Learn about your health. Find the care you need.</h1>
+          <h1><span>Learn about your</span><span>health.</span><span>Find the care you</span><span>need.</span></h1>
           <p className="hero__text">
             Explore clear health education from Mediscripts, then browse pharmacy products and
             services whenever you need them.

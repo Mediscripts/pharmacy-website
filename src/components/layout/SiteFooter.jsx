@@ -38,6 +38,8 @@ function SiteFooter() {
         <div className="site-footer__stack">
           <div className="site-footer__links" aria-label="Footer links">
             <Link to="/">Home</Link>
+            <Link to="/health-hub">Health Hub</Link>
+            <Link to="/book-pharmacist">Book a call</Link>
             <Link to="/products">Products</Link>
             <Link to="/track-order">Track Order</Link>
             <Link to="/contact">Contact</Link>

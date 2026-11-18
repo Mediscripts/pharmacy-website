@@ -197,6 +197,14 @@ function AdminDashboardPage() {
 
       <section className="admin-sections">
         <ActionCard
+          to="/admin/pharmacist-bookings"
+          eyebrow="Pharmacy support"
+          title="Manage pharmacist call requests"
+          description="Review requested times, confirm or offer another time, and email customers directly from the admin workspace."
+          cta="Open call requests"
+          icon="orders"
+        />
+        <ActionCard
           to="/admin/health-hub"
           eyebrow="Health education"
           title="Publish helpful health articles"

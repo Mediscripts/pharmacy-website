@@ -9,7 +9,7 @@ const sitemapPath = path.join(publicDir, 'sitemap.xml')
 
 const apiBaseUrl = process.env.VITE_API_BASE_URL || 'http://localhost:4000'
 const frontendUrl = String(process.env.FRONTEND_URL || 'https://www.mediscriptspharmacy.com').replace(/\/$/, '')
-const staticPaths = ['', 'products', 'health-hub', 'contact', 'track-order', 'cart', 'checkout']
+const staticPaths = ['', 'products', 'health-hub', 'book-pharmacist', 'contact', 'track-order', 'cart', 'checkout']
 const pageSize = 50
 
 async function fetchProducts() {

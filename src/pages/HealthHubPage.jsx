@@ -85,7 +85,7 @@ function HealthHubPage() {
 
   return <main className="health-hub">
     <section className="health-hub__hero">
-      <div className="health-hub__hero-copy"><p className="health-kicker">Mediscripts Health Hub</p><h1>{title}</h1><p>Clear, practical health education to help you make informed choices and know when to speak with a qualified health professional.</p><form className="health-search" onSubmit={submitSearch}><label htmlFor="health-search-input">Search health articles</label><div><input id="health-search-input" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try medication safety or hydration" /><button type="submit">Search</button></div></form></div>
+      <div className="health-hub__hero-copy"><p className="health-kicker">Mediscripts Health Hub</p><h1>{title}</h1><p>Clear, practical health education to help you make informed choices and know when to speak with a qualified health professional.</p><form className="health-search" onSubmit={submitSearch}><label htmlFor="health-search-input">Search health articles</label><div><input id="health-search-input" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try medication safety or hydration" /><button type="submit">Search</button></div></form><Link className="health-hub__pharmacist-link" to="/book-pharmacist">Book a call with our pharmacist <span aria-hidden="true">→</span></Link></div>
       <div className="health-hub__hero-note"><span aria-hidden="true">✳</span><p>Our articles share general health information. They do not replace a personal consultation with a qualified healthcare professional.</p></div>
     </section>
 
